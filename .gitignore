@@ -1,0 +1,16 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# Outros arquivos de projeto
+target/
+build/
+bin/
+out/
+
+# Arquivos de log
+*.log
+
+# Configurações de ambiente
+application-local.properties
