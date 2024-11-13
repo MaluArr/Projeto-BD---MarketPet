@@ -1,8 +1,6 @@
 package com.MarketPet.MarketPet.Repository;
 
 import com.MarketPet.MarketPet.Model.FavoritarProduto;
-import com.MarketPet.MarketPet.Model.Comprador;
-import com.MarketPet.MarketPet.Model.Produto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,32 +16,14 @@ public class FavoritarProdutoRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private CompradorRepository compradorRepository;
-
-    @Autowired
-    private ProdutoRepository produtoRepository;
-
     private RowMapper<FavoritarProduto> favoritarProdutoRowMapper = (rs, rowNum) -> {
         FavoritarProduto favoritarProduto = new FavoritarProduto();
         favoritarProduto.setIdLista(rs.getInt("id_lista"));
-
-        // Busca do Comprador
-        Long cpfComprador = rs.getLong("cpf_comprador");
-        Optional<Comprador> compradorOpt = compradorRepository.findByCpf(cpfComprador);
-        compradorOpt.ifPresent(favoritarProduto::setComprador);
-
-        // Busca do Produto
-        Integer codigoProduto = rs.getInt("codigo_produto");
-        Optional<Produto> produtoOpt = produtoRepository.findByCodigo(codigoProduto);
-        produtoOpt.ifPresent(favoritarProduto::setProduto);
-
-        // Conversão de Date para LocalDate
+        favoritarProduto.setCpfComprador(rs.getLong("cpf_comprador"));
+        favoritarProduto.setCodigoProduto(rs.getInt("codigo_produto"));
+        favoritarProduto.setNomeLista(rs.getString("nome_lista"));
         Date dataCriacao = rs.getDate("data_criacao");
         favoritarProduto.setDataCriacao(dataCriacao != null ? dataCriacao.toLocalDate() : null);
-
-        favoritarProduto.setNomeLista(rs.getString("nome_lista"));
-
         return favoritarProduto;
     };
 
@@ -65,21 +45,18 @@ public class FavoritarProdutoRepository {
     }
 
     public FavoritarProduto save(FavoritarProduto favoritarProduto) {
-        String sql = "INSERT INTO favoritar_produto " +
-                "(id_lista, cpf_comprador, codigo_produto, nome_lista, data_criacao) " +
+        String sql = "INSERT INTO favoritar_produto (id_lista, cpf_comprador, codigo_produto, nome_lista, data_criacao) " +
                 "VALUES (?, ?, ?, ?, ?) " +
-                "ON DUPLICATE KEY UPDATE " +
-                "cpf_comprador = ?, codigo_produto = ?, nome_lista = ?, data_criacao = ?";
+                "ON DUPLICATE KEY UPDATE cpf_comprador = ?, codigo_produto = ?, nome_lista = ?, data_criacao = ?";
 
         jdbcTemplate.update(sql,
                 favoritarProduto.getIdLista(),
-                favoritarProduto.getComprador().getCpf(),
-                favoritarProduto.getProduto().getCodigoProduto(),
+                favoritarProduto.getCpfComprador(),
+                favoritarProduto.getCodigoProduto(),
                 favoritarProduto.getNomeLista(),
                 Date.valueOf(favoritarProduto.getDataCriacao()),
-                // Valores para UPDATE
-                favoritarProduto.getComprador().getCpf(),
-                favoritarProduto.getProduto().getCodigoProduto(),
+                favoritarProduto.getCpfComprador(),
+                favoritarProduto.getCodigoProduto(),
                 favoritarProduto.getNomeLista(),
                 Date.valueOf(favoritarProduto.getDataCriacao())
         );

@@ -2,8 +2,6 @@ package com.MarketPet.MarketPet.Service;
 
 import com.MarketPet.MarketPet.Model.Venda;
 import com.MarketPet.MarketPet.Repository.VendaRepository;
-import com.MarketPet.MarketPet.Repository.CompradorRepository;
-import com.MarketPet.MarketPet.Repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,12 +16,6 @@ public class VendaService {
     @Autowired
     private VendaRepository vendaRepository;
 
-    @Autowired
-    private CompradorRepository compradorRepository;
-
-    @Autowired
-    private ProdutoRepository produtoRepository;
-
     public List<Venda> listarTodos() {
         return vendaRepository.findAll();
     }
@@ -34,7 +26,6 @@ public class VendaService {
 
     @Transactional
     public Venda criarVenda(Venda venda) {
-        // Validações
         if (!venda.isCompradorValido()) {
             throw new RuntimeException("Comprador inválido");
         }
@@ -43,7 +34,6 @@ public class VendaService {
             throw new RuntimeException("Produto inválido");
         }
 
-        // Define data de venda como hoje se não for especificada
         if (venda.getDataVenda() == null) {
             venda.setDataVenda(LocalDate.now());
         }
@@ -52,24 +42,14 @@ public class VendaService {
             throw new RuntimeException("Data de venda inválida");
         }
 
-        // Verifica existência do comprador
-        compradorRepository.findByCpf(venda.getComprador().getCpf())
-                .orElseThrow(() -> new RuntimeException("Comprador não encontrado"));
-
-        // Verifica existência do produto
-        produtoRepository.findByCodigo(venda.getProduto().getCodigoProduto())
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
-
         return vendaRepository.save(venda);
     }
 
     @Transactional
     public Venda atualizarVenda(Venda venda) {
-        // Verifica se a venda existe
         vendaRepository.findById(venda.getIdVenda())
                 .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
 
-        // Validações
         if (!venda.isCompradorValido()) {
             throw new RuntimeException("Comprador inválido");
         }
@@ -81,14 +61,6 @@ public class VendaService {
         if (!venda.isDataVendaValida()) {
             throw new RuntimeException("Data de venda inválida");
         }
-
-        // Verifica existência do comprador
-        compradorRepository.findByCpf(venda.getComprador().getCpf())
-                .orElseThrow(() -> new RuntimeException("Comprador não encontrado"));
-
-        // Verifica existência do produto
-        produtoRepository.findByCodigo(venda.getProduto().getCodigoProduto())
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
         return vendaRepository.save(venda);
     }

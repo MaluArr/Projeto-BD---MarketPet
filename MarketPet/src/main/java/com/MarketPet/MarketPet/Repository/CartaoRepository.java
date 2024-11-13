@@ -21,11 +21,8 @@ public class CartaoRepository {
         cartao.setIdCartao(rs.getInt("id_cartao"));
         cartao.setNumero(rs.getString("numero"));
         cartao.setNomeTitular(rs.getString("nome_titular"));
-
-        // Conversão de Date para LocalDate
         Date validade = rs.getDate("validade");
         cartao.setValidade(validade != null ? validade.toLocalDate() : null);
-
         cartao.setCvv(rs.getString("cvv"));
         cartao.setBandeira(rs.getString("bandeira"));
         return cartao;
@@ -62,25 +59,16 @@ public class CartaoRepository {
     }
 
     public Cartao save(Cartao cartao) {
-        String sql = "INSERT INTO cartao " +
-                "(id_cartao, numero, nome_titular, validade, cvv, bandeira) " +
+        String sql = "INSERT INTO cartao (id_cartao, numero, nome_titular, validade, cvv, bandeira) " +
                 "VALUES (?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
                 "numero = ?, nome_titular = ?, validade = ?, cvv = ?, bandeira = ?";
 
         jdbcTemplate.update(sql,
-                cartao.getIdCartao(),
-                cartao.getNumero(),
-                cartao.getNomeTitular(),
-                Date.valueOf(cartao.getValidade()),
-                cartao.getCvv(),
-                cartao.getBandeira(),
-                // Valores para UPDATE
-                cartao.getNumero(),
-                cartao.getNomeTitular(),
-                Date.valueOf(cartao.getValidade()),
-                cartao.getCvv(),
-                cartao.getBandeira()
+                cartao.getIdCartao(), cartao.getNumero(), cartao.getNomeTitular(),
+                Date.valueOf(cartao.getValidade()), cartao.getCvv(), cartao.getBandeira(),
+                cartao.getNumero(), cartao.getNomeTitular(), Date.valueOf(cartao.getValidade()),
+                cartao.getCvv(), cartao.getBandeira()
         );
 
         return cartao;

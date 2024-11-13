@@ -42,13 +42,11 @@ public class FuncionarioRepository {
     public Funcionario save(Funcionario funcionario) {
         String sql = "INSERT INTO funcionario_marketpet (cpf_funcionario, nome) " +
                 "VALUES (?, ?) " +
-                "ON DUPLICATE KEY UPDATE " +
-                "nome = ?";
+                "ON DUPLICATE KEY UPDATE nome = ?";
 
         jdbcTemplate.update(sql,
                 funcionario.getCpfFuncionario(),
                 funcionario.getNome(),
-                // Valor para UPDATE
                 funcionario.getNome()
         );
 

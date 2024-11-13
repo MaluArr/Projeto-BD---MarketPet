@@ -23,12 +23,10 @@ public class FuncionarioService {
     }
 
     public Funcionario criarFuncionario(Funcionario funcionario) {
-        // Validações
         if (!funcionario.isNomeValido()) {
             throw new RuntimeException("Nome de funcionário inválido");
         }
 
-        // Verifica se já existe funcionário com o mesmo CPF
         if (funcionarioRepository.findByCpf(funcionario.getCpfFuncionario()).isPresent()) {
             throw new RuntimeException("Já existe um funcionário com este CPF");
         }
@@ -37,11 +35,9 @@ public class FuncionarioService {
     }
 
     public Funcionario atualizarFuncionario(Funcionario funcionario) {
-        // Verifica se o funcionário existe
         funcionarioRepository.findByCpf(funcionario.getCpfFuncionario())
                 .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
 
-        // Validações
         if (!funcionario.isNomeValido()) {
             throw new RuntimeException("Nome de funcionário inválido");
         }

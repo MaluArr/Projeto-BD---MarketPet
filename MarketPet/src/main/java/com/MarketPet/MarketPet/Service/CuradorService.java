@@ -27,17 +27,14 @@ public class CuradorService {
     }
 
     public Curador criarCurador(Curador curador) {
-        // Validações
         if (!curador.isFuncionarioValido()) {
             throw new RuntimeException("Funcionário inválido");
         }
 
-        // Verifica se o funcionário existe
-        funcionarioRepository.findByCpf(curador.getFuncionario().getCpfFuncionario())
+        funcionarioRepository.findByCpf(curador.getCpfFuncionario())
                 .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
 
-        // Verifica se o funcionário já é um curador
-        curadorRepository.findByFuncionario(curador.getFuncionario().getCpfFuncionario())
+        curadorRepository.findByFuncionario(curador.getCpfFuncionario())
                 .ifPresent(c -> {
                     throw new RuntimeException("Funcionário já é um curador");
                 });
@@ -46,17 +43,14 @@ public class CuradorService {
     }
 
     public Curador atualizarCurador(Curador curador) {
-        // Verifica se o curador existe
         curadorRepository.findById(curador.getIdCurador())
                 .orElseThrow(() -> new RuntimeException("Curador não encontrado"));
 
-        // Validações
         if (!curador.isFuncionarioValido()) {
             throw new RuntimeException("Funcionário inválido");
         }
 
-        // Verifica se o funcionário existe
-        funcionarioRepository.findByCpf(curador.getFuncionario().getCpfFuncionario())
+        funcionarioRepository.findByCpf(curador.getCpfFuncionario())
                 .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
 
         return curadorRepository.save(curador);

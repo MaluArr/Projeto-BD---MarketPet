@@ -4,20 +4,14 @@ import java.util.Objects;
 
 public class Atendente {
     private Integer idAtendente;
-    private Funcionario funcionario;
+    private Long cpfFuncionario;
 
     // Construtores
-    public Atendente() {
-    }
+    public Atendente() {}
 
-    public Atendente(Integer idAtendente, Funcionario funcionario) {
+    public Atendente(Integer idAtendente, Long cpfFuncionario) {
         this.idAtendente = idAtendente;
-        this.funcionario = funcionario;
-    }
-
-    // Validações personalizadas
-    public boolean isFuncionarioValido() {
-        return funcionario != null && funcionario.getCpfFuncionario() != null;
+        this.cpfFuncionario = cpfFuncionario;
     }
 
     // Getters e Setters
@@ -29,12 +23,12 @@ public class Atendente {
         this.idAtendente = idAtendente;
     }
 
-    public Funcionario getFuncionario() {
-        return funcionario;
+    public Long getCpfFuncionario() {
+        return cpfFuncionario;
     }
 
-    public void setFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
+    public void setCpfFuncionario(Long cpfFuncionario) {
+        this.cpfFuncionario = cpfFuncionario;
     }
 
     // Métodos equals e hashCode
@@ -56,7 +50,7 @@ public class Atendente {
     public String toString() {
         return "Atendente{" +
                 "idAtendente=" + idAtendente +
-                ", funcionario=" + (funcionario != null ? funcionario.getCpfFuncionario() : "N/A") +
+                ", cpfFuncionario=" + cpfFuncionario +
                 '}';
     }
 }

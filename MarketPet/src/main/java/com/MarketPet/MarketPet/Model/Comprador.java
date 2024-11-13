@@ -4,26 +4,25 @@ import java.util.Objects;
 
 public class Comprador {
     private Long cpf;
-    private Endereco endereco;
-    private Cartao cartao;
+    private Integer idEndereco;
+    private Integer idCartao;
 
     // Construtores
-    public Comprador() {
-    }
+    public Comprador() {}
 
-    public Comprador(Long cpf, Endereco endereco, Cartao cartao) {
+    public Comprador(Long cpf, Integer idEndereco, Integer idCartao) {
         this.cpf = cpf;
-        this.endereco = endereco;
-        this.cartao = cartao;
+        this.idEndereco = idEndereco;
+        this.idCartao = idCartao;
     }
 
     // Validações personalizadas
     public boolean isEnderecoValido() {
-        return endereco != null && endereco.getIdEndereco() != null;
+        return idEndereco != null;
     }
 
     public boolean isCartaoValido() {
-        return cartao != null && cartao.getIdCartao() != null;
+        return idCartao != null;
     }
 
     // Getters e Setters
@@ -35,20 +34,20 @@ public class Comprador {
         this.cpf = cpf;
     }
 
-    public Endereco getEndereco() {
-        return endereco;
+    public Integer getIdEndereco() {
+        return idEndereco;
     }
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
+    public void setIdEndereco(Integer idEndereco) {
+        this.idEndereco = idEndereco;
     }
 
-    public Cartao getCartao() {
-        return cartao;
+    public Integer getIdCartao() {
+        return idCartao;
     }
 
-    public void setCartao(Cartao cartao) {
-        this.cartao = cartao;
+    public void setIdCartao(Integer idCartao) {
+        this.idCartao = idCartao;
     }
 
     // Métodos equals e hashCode
@@ -70,8 +69,8 @@ public class Comprador {
     public String toString() {
         return "Comprador{" +
                 "cpf=" + cpf +
-                ", endereco=" + (endereco != null ? endereco.getIdEndereco() : "N/A") +
-                ", cartao=" + (cartao != null ? cartao.getIdCartao() : "N/A") +
+                ", idEndereco=" + (idEndereco != null ? idEndereco : "N/A") +
+                ", idCartao=" + (idCartao != null ? idCartao : "N/A") +
                 '}';
     }
 }

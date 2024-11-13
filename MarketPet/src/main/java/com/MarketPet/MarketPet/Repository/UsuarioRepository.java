@@ -6,8 +6,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,10 +46,18 @@ public class UsuarioRepository {
 
     public Usuario save(Usuario usuario) {
         String sql = "INSERT INTO usuario (CPF, nome_real, nome_usuario, email, senha, telefone1, telefone2) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?) " +
+                "ON DUPLICATE KEY UPDATE nome_real = ?, nome_usuario = ?, email = ?, senha = ?, telefone1 = ?, telefone2 = ?";
 
         jdbcTemplate.update(sql,
                 usuario.getCpf(),
+                usuario.getNomeReal(),
+                usuario.getNomeUsuario(),
+                usuario.getEmail(),
+                usuario.getSenha(),
+                usuario.getTelefone1(),
+                usuario.getTelefone2(),
+                // Valores para UPDATE
                 usuario.getNomeReal(),
                 usuario.getNomeUsuario(),
                 usuario.getEmail(),

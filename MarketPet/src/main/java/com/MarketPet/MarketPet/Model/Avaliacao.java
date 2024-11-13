@@ -5,50 +5,21 @@ import java.util.Objects;
 
 public class Avaliacao {
     private Integer idAvaliacao;
-    private Comprador comprador;
-    private Produto produto;
-    private Venda venda;
+    private Long cpfComprador;
+    private Integer codigoProduto;
+    private Integer idVenda;
     private BigDecimal nota;
 
     // Construtores
-    public Avaliacao() {
-    }
+    public Avaliacao() {}
 
-    public Avaliacao(Integer idAvaliacao, Comprador comprador, Produto produto,
-                     Venda venda, BigDecimal nota) {
+    public Avaliacao(Integer idAvaliacao, Long cpfComprador, Integer codigoProduto,
+                     Integer idVenda, BigDecimal nota) {
         this.idAvaliacao = idAvaliacao;
-        this.comprador = comprador;
-        this.produto = produto;
-        this.venda = venda;
+        this.cpfComprador = cpfComprador;
+        this.codigoProduto = codigoProduto;
+        this.idVenda = idVenda;
         this.nota = nota;
-    }
-
-    // Validações personalizadas
-    public boolean isCompradorValido() {
-        return comprador != null && comprador.getCpf() != null;
-    }
-
-    public boolean isProdutoValido() {
-        return produto != null && produto.getCodigoProduto() != null;
-    }
-
-    public boolean isVendaValida() {
-        return venda != null && venda.getIdVenda() != null;
-    }
-
-    public boolean isNotaValida() {
-        return nota != null &&
-                nota.compareTo(BigDecimal.ZERO) >= 0 &&
-                nota.compareTo(new BigDecimal("5.00")) <= 0;
-    }
-
-    // Verifica se a avaliação corresponde ao comprador e produto da venda
-    public boolean isAvaliacaoConsistente() {
-        return isCompradorValido() &&
-                isProdutoValido() &&
-                isVendaValida() &&
-                venda.getComprador().getCpf().equals(comprador.getCpf()) &&
-                venda.getProduto().getCodigoProduto().equals(produto.getCodigoProduto());
     }
 
     // Getters e Setters
@@ -60,28 +31,28 @@ public class Avaliacao {
         this.idAvaliacao = idAvaliacao;
     }
 
-    public Comprador getComprador() {
-        return comprador;
+    public Long getCpfComprador() {
+        return cpfComprador;
     }
 
-    public void setComprador(Comprador comprador) {
-        this.comprador = comprador;
+    public void setCpfComprador(Long cpfComprador) {
+        this.cpfComprador = cpfComprador;
     }
 
-    public Produto getProduto() {
-        return produto;
+    public Integer getCodigoProduto() {
+        return codigoProduto;
     }
 
-    public void setProduto(Produto produto) {
-        this.produto = produto;
+    public void setCodigoProduto(Integer codigoProduto) {
+        this.codigoProduto = codigoProduto;
     }
 
-    public Venda getVenda() {
-        return venda;
+    public Integer getIdVenda() {
+        return idVenda;
     }
 
-    public void setVenda(Venda venda) {
-        this.venda = venda;
+    public void setIdVenda(Integer idVenda) {
+        this.idVenda = idVenda;
     }
 
     public BigDecimal getNota() {
@@ -92,7 +63,7 @@ public class Avaliacao {
         this.nota = nota;
     }
 
-    // Métodos equals e hashCode
+    // Métodos equals, hashCode e toString
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -106,14 +77,13 @@ public class Avaliacao {
         return Objects.hash(idAvaliacao);
     }
 
-    // Método toString
     @Override
     public String toString() {
         return "Avaliacao{" +
                 "idAvaliacao=" + idAvaliacao +
-                ", comprador=" + (comprador != null ? comprador.getCpf() : "N/A") +
-                ", produto=" + (produto != null ? produto.getCodigoProduto() : "N/A") +
-                ", venda=" + (venda != null ? venda.getIdVenda() : "N/A") +
+                ", cpfComprador=" + cpfComprador +
+                ", codigoProduto=" + codigoProduto +
+                ", idVenda=" + idVenda +
                 ", nota=" + nota +
                 '}';
     }

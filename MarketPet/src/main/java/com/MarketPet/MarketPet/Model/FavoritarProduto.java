@@ -5,31 +5,30 @@ import java.util.Objects;
 
 public class FavoritarProduto {
     private Integer idLista;
-    private Comprador comprador;
-    private Produto produto;
+    private Long cpfComprador;
+    private Integer codigoProduto;
     private String nomeLista;
     private LocalDate dataCriacao;
 
     // Construtores
-    public FavoritarProduto() {
-    }
+    public FavoritarProduto() {}
 
-    public FavoritarProduto(Integer idLista, Comprador comprador, Produto produto,
+    public FavoritarProduto(Integer idLista, Long cpfComprador, Integer codigoProduto,
                             String nomeLista, LocalDate dataCriacao) {
         this.idLista = idLista;
-        this.comprador = comprador;
-        this.produto = produto;
+        this.cpfComprador = cpfComprador;
+        this.codigoProduto = codigoProduto;
         this.nomeLista = nomeLista;
         this.dataCriacao = dataCriacao;
     }
 
     // Validações personalizadas
     public boolean isCompradorValido() {
-        return comprador != null && comprador.getCpf() != null;
+        return cpfComprador != null;
     }
 
     public boolean isProdutoValido() {
-        return produto != null && produto.getCodigoProduto() != null;
+        return codigoProduto != null;
     }
 
     public boolean isNomeListaValido() {
@@ -49,20 +48,20 @@ public class FavoritarProduto {
         this.idLista = idLista;
     }
 
-    public Comprador getComprador() {
-        return comprador;
+    public Long getCpfComprador() {
+        return cpfComprador;
     }
 
-    public void setComprador(Comprador comprador) {
-        this.comprador = comprador;
+    public void setCpfComprador(Long cpfComprador) {
+        this.cpfComprador = cpfComprador;
     }
 
-    public Produto getProduto() {
-        return produto;
+    public Integer getCodigoProduto() {
+        return codigoProduto;
     }
 
-    public void setProduto(Produto produto) {
-        this.produto = produto;
+    public void setCodigoProduto(Integer codigoProduto) {
+        this.codigoProduto = codigoProduto;
     }
 
     public String getNomeLista() {
@@ -100,8 +99,8 @@ public class FavoritarProduto {
     public String toString() {
         return "FavoritarProduto{" +
                 "idLista=" + idLista +
-                ", comprador=" + (comprador != null ? comprador.getCpf() : "N/A") +
-                ", produto=" + (produto != null ? produto.getCodigoProduto() : "N/A") +
+                ", cpfComprador=" + cpfComprador +
+                ", codigoProduto=" + codigoProduto +
                 ", nomeLista='" + nomeLista + '\'' +
                 ", dataCriacao=" + dataCriacao +
                 '}';

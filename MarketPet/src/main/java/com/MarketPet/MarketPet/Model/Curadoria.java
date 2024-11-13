@@ -6,29 +6,28 @@ public class Curadoria {
     private Integer codigoCuradoria;
     private String descricao;
     private String resultadoCuradoria;
-    private Curador curador;
-    private Produto produto;
+    private Integer idCurador;
+    private Integer codigoProduto;
 
     // Construtores
-    public Curadoria() {
-    }
+    public Curadoria() {}
 
     public Curadoria(Integer codigoCuradoria, String descricao, String resultadoCuradoria,
-                     Curador curador, Produto produto) {
+                     Integer idCurador, Integer codigoProduto) {
         this.codigoCuradoria = codigoCuradoria;
         this.descricao = descricao;
         this.resultadoCuradoria = resultadoCuradoria;
-        this.curador = curador;
-        this.produto = produto;
+        this.idCurador = idCurador;
+        this.codigoProduto = codigoProduto;
     }
 
     // Validações personalizadas
     public boolean isCuradorValido() {
-        return curador != null && curador.getIdCurador() != null;
+        return idCurador != null;
     }
 
     public boolean isProdutoValido() {
-        return produto != null && produto.getCodigoProduto() != null;
+        return codigoProduto != null;
     }
 
     public boolean isDescricaoValida() {
@@ -60,20 +59,20 @@ public class Curadoria {
         this.resultadoCuradoria = resultadoCuradoria;
     }
 
-    public Curador getCurador() {
-        return curador;
+    public Integer getIdCurador() {
+        return idCurador;
     }
 
-    public void setCurador(Curador curador) {
-        this.curador = curador;
+    public void setIdCurador(Integer idCurador) {
+        this.idCurador = idCurador;
     }
 
-    public Produto getProduto() {
-        return produto;
+    public Integer getCodigoProduto() {
+        return codigoProduto;
     }
 
-    public void setProduto(Produto produto) {
-        this.produto = produto;
+    public void setCodigoProduto(Integer codigoProduto) {
+        this.codigoProduto = codigoProduto;
     }
 
     // Métodos equals e hashCode
@@ -97,8 +96,8 @@ public class Curadoria {
                 "codigoCuradoria=" + codigoCuradoria +
                 ", descricao='" + descricao + '\'' +
                 ", resultadoCuradoria='" + resultadoCuradoria + '\'' +
-                ", curador=" + (curador != null ? curador.getIdCurador() : "N/A") +
-                ", produto=" + (produto != null ? produto.getCodigoProduto() : "N/A") +
+                ", idCurador=" + (idCurador != null ? idCurador : "N/A") +
+                ", codigoProduto=" + (codigoProduto != null ? codigoProduto : "N/A") +
                 '}';
     }
 }

@@ -1,7 +1,6 @@
 package com.MarketPet.MarketPet.Repository;
 
 import com.MarketPet.MarketPet.Model.Curador;
-import com.MarketPet.MarketPet.Model.Funcionario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,18 +15,10 @@ public class CuradorRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private FuncionarioRepository funcionarioRepository;
-
     private RowMapper<Curador> curadorRowMapper = (rs, rowNum) -> {
         Curador curador = new Curador();
         curador.setIdCurador(rs.getInt("id_curador"));
-
-        // Busca do Funcionário
-        Long cpfFuncionario = rs.getLong("cpf_funcionario");
-        Optional<Funcionario> funcionarioOpt = funcionarioRepository.findByCpf(cpfFuncionario);
-        funcionarioOpt.ifPresent(curador::setFuncionario);
-
+        curador.setCpfFuncionario(rs.getLong("cpf_funcionario"));
         return curador;
     };
 
@@ -64,14 +55,12 @@ public class CuradorRepository {
     public Curador save(Curador curador) {
         String sql = "INSERT INTO curador (id_curador, cpf_funcionario) " +
                 "VALUES (?, ?) " +
-                "ON DUPLICATE KEY UPDATE " +
-                "cpf_funcionario = ?";
+                "ON DUPLICATE KEY UPDATE cpf_funcionario = ?";
 
         jdbcTemplate.update(sql,
                 curador.getIdCurador(),
-                curador.getFuncionario().getCpfFuncionario(),
-                // Valor para UPDATE
-                curador.getFuncionario().getCpfFuncionario()
+                curador.getCpfFuncionario(),
+                curador.getCpfFuncionario()
         );
 
         return curador;

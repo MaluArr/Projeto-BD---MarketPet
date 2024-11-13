@@ -3,11 +3,11 @@ package com.MarketPet.MarketPet.Controller;
 import com.MarketPet.MarketPet.Model.Atendente;
 import com.MarketPet.MarketPet.Service.AtendenteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/atendentes")
@@ -21,38 +21,45 @@ public class AtendenteController {
         return atendenteService.listarTodos();
     }
 
-    @GetMapping("/{idAtendente}")
-    public ResponseEntity<Atendente> buscarPorId(@PathVariable Integer idAtendente) {
-        return atendenteService.buscarPorId(idAtendente)
+    @GetMapping("/{id}")
+    public ResponseEntity<Atendente> buscarPorId(@PathVariable Integer id) {
+        return atendenteService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Atendente> criarAtendente(@RequestBody Atendente atendente) {
-        Atendente novoAtendente = atendenteService.criarAtendente(atendente);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoAtendente);
+    public Atendente criarAtendente(@RequestBody Atendente atendente) {
+        return atendenteService.salvarAtendente(atendente);
     }
 
-    @PutMapping("/{idAtendente}")
-    public ResponseEntity<Atendente> atualizarAtendente(
-            @PathVariable Integer idAtendente,
-            @RequestBody Atendente atendente) {
-        atendente.setIdAtendente(idAtendente);
-        Atendente atendenteAtualizado = atendenteService.atualizarAtendente(atendente);
-        return ResponseEntity.ok(atendenteAtualizado);
+    @PutMapping("/{id}")
+    public ResponseEntity<Atendente> atualizarAtendente(@PathVariable Integer id, @RequestBody Atendente atendente) {
+        if (!atendenteService.buscarPorId(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        atendente.setIdAtendente(id);
+        return ResponseEntity.ok(atendenteService.salvarAtendente(atendente));
     }
 
-    @DeleteMapping("/{idAtendente}")
-    public ResponseEntity<Void> deletarAtendente(@PathVariable Integer idAtendente) {
-        atendenteService.deletarAtendente(idAtendente);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarAtendente(@PathVariable Integer id) {
+        if (!atendenteService.buscarPorId(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        atendenteService.deletarAtendente(id);
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/funcionario/{cpfFuncionario}")
-    public ResponseEntity<Atendente> buscarPorCpfFuncionario(@PathVariable Long cpfFuncionario) {
-        return atendenteService.buscarPorCpfFuncionario(cpfFuncionario)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/relatorio/atendimentos")
+    public List<Map<String, Object>> relatorioAtendimentosPorAtendente() {
+        return atendenteService.gerarRelatorioAtendimentosPorAtendente();
+    }
+
+    @GetMapping("/relatorio/atendimentos-periodo")
+    public List<Map<String, Object>> relatorioAtendimentosPorPeriodo(
+            @RequestParam String dataInicio,
+            @RequestParam String dataFim) {
+        return atendenteService.gerarRelatorioAtendimentosPorPeriodo(dataInicio, dataFim);
     }
 }

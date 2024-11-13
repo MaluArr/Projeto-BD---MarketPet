@@ -7,8 +7,7 @@ public class Funcionario {
     private String nome;
 
     // Construtores
-    public Funcionario() {
-    }
+    public Funcionario() {}
 
     public Funcionario(Long cpfFuncionario, String nome) {
         this.cpfFuncionario = cpfFuncionario;

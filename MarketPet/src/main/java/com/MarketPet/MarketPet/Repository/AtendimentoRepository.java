@@ -1,17 +1,16 @@
 package com.MarketPet.MarketPet.Repository;
 
 import com.MarketPet.MarketPet.Model.Atendimento;
-import com.MarketPet.MarketPet.Model.Funcionario;
-import com.MarketPet.MarketPet.Model.Usuario;
-import com.MarketPet.MarketPet.Model.Chat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Map;
 
 @Repository
 public class AtendimentoRepository {
@@ -19,40 +18,14 @@ public class AtendimentoRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private FuncionarioRepository funcionarioRepository;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private ChatRepository chatRepository;
-
     private RowMapper<Atendimento> atendimentoRowMapper = (rs, rowNum) -> {
         Atendimento atendimento = new Atendimento();
         atendimento.setIdAtendimento(rs.getInt("id_atendimento"));
-
-        // Busca do Funcionário
-        Long cpfFuncionario = rs.getLong("cpf_funcionario");
-        Optional<Funcionario> funcionarioOpt = funcionarioRepository.findByCpf(cpfFuncionario);
-        funcionarioOpt.ifPresent(atendimento::setFuncionario);
-
-        // Busca do Usuário
-        Long cpfUsuario = rs.getLong("cpf_usuario");
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByCpf(cpfUsuario);
-        usuarioOpt.ifPresent(atendimento::setUsuario);
-
-        // Busca do Chat
-        Integer idChat = rs.getInt("id_chat");
-        Optional<Chat> chatOpt = chatRepository.findById(idChat);
-        chatOpt.ifPresent(atendimento::setChat);
-
-        // Conversão de Date para LocalDate
-        Date dataAtendimento = rs.getDate("data_atendimento");
-        atendimento.setDataAtendimento(dataAtendimento != null ? dataAtendimento.toLocalDate() : null);
-
+        atendimento.setCpfFuncionario(rs.getLong("cpf_funcionario"));
+        atendimento.setCpfUsuario(rs.getLong("cpf_usuario"));
+        atendimento.setIdChat(rs.getInt("id_chat"));
+        atendimento.setDataAtendimento(rs.getDate("data_atendimento").toLocalDate());
         atendimento.setCategoria(rs.getString("categoria"));
-
         return atendimento;
     };
 
@@ -61,81 +34,50 @@ public class AtendimentoRepository {
     }
 
     public Optional<Atendimento> findById(Integer idAtendimento) {
-        try {
-            Atendimento atendimento = jdbcTemplate.queryForObject(
-                    "SELECT * FROM atendimento WHERE id_atendimento = ?",
-                    new Object[]{idAtendimento},
-                    atendimentoRowMapper
-            );
-            return Optional.ofNullable(atendimento);
-        } catch (Exception e) {
-            return Optional.empty();
-        }
-    }
-
-    public Optional<Atendimento> findByChat(Integer idChat) {
-        try {
-            Atendimento atendimento = jdbcTemplate.queryForObject(
-                    "SELECT * FROM atendimento WHERE id_chat = ?",
-                    new Object[]{idChat},
-                    atendimentoRowMapper
-            );
-            return Optional.ofNullable(atendimento);
-        } catch (Exception e) {
-            return Optional.empty();
-        }
+        String sql = "SELECT * FROM atendimento WHERE id_atendimento = ?";
+        List<Atendimento> results = jdbcTemplate.query(sql, new Object[]{idAtendimento}, atendimentoRowMapper);
+        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
     }
 
     public Atendimento save(Atendimento atendimento) {
-        String sql = "INSERT INTO atendimento " +
-                "(id_atendimento, cpf_funcionario, cpf_usuario, id_chat, data_atendimento, categoria) " +
+        String sql = "INSERT INTO atendimento (id_atendimento, cpf_funcionario, cpf_usuario, id_chat, data_atendimento, categoria) " +
                 "VALUES (?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
                 "cpf_funcionario = ?, cpf_usuario = ?, id_chat = ?, data_atendimento = ?, categoria = ?";
 
         jdbcTemplate.update(sql,
-                atendimento.getIdAtendimento(),
-                atendimento.getFuncionario().getCpfFuncionario(),
-                atendimento.getUsuario().getCpf(),
-                atendimento.getChat().getIdChat(),
-                Date.valueOf(atendimento.getDataAtendimento()),
-                atendimento.getCategoria(),
-                // Valores para UPDATE
-                atendimento.getFuncionario().getCpfFuncionario(),
-                atendimento.getUsuario().getCpf(),
-                atendimento.getChat().getIdChat(),
-                Date.valueOf(atendimento.getDataAtendimento()),
-                atendimento.getCategoria()
+                atendimento.getIdAtendimento(), atendimento.getCpfFuncionario(), atendimento.getCpfUsuario(),
+                atendimento.getIdChat(), Date.valueOf(atendimento.getDataAtendimento()), atendimento.getCategoria(),
+                atendimento.getCpfFuncionario(), atendimento.getCpfUsuario(), atendimento.getIdChat(),
+                Date.valueOf(atendimento.getDataAtendimento()), atendimento.getCategoria()
         );
-
         return atendimento;
     }
 
-    public void delete(Integer idAtendimento) {
+    public void deleteById(Integer idAtendimento) {
         jdbcTemplate.update("DELETE FROM atendimento WHERE id_atendimento = ?", idAtendimento);
     }
 
-    public List<Atendimento> findByFuncionario(Long cpfFuncionario) {
-        return jdbcTemplate.query(
-                "SELECT * FROM atendimento WHERE cpf_funcionario = ?",
-                new Object[]{cpfFuncionario},
-                atendimentoRowMapper
-        );
+    public List<Map<String, Object>> getAtendimentosPorFuncionario() {
+        String sql = "SELECT fm.nome, COUNT(*) as total_atendimentos " +
+                "FROM atendimento a " +
+                "JOIN funcionario_marketpet fm ON a.cpf_funcionario = fm.cpf_funcionario " +
+                "GROUP BY fm.cpf_funcionario, fm.nome";
+        return jdbcTemplate.queryForList(sql);
     }
 
-    public List<Atendimento> findByUsuario(Long cpfUsuario) {
-        return jdbcTemplate.query(
-                "SELECT * FROM atendimento WHERE cpf_usuario = ?",
-                new Object[]{cpfUsuario},
-                atendimentoRowMapper
-        );
+    public List<Map<String, Object>> getAtendimentosPorCategoria() {
+        String sql = "SELECT categoria, COUNT(*) as total " +
+                "FROM atendimento " +
+                "GROUP BY categoria";
+        return jdbcTemplate.queryForList(sql);
     }
 
-    public List<Atendimento> findByCategoria(String categoria) {
-        return jdbcTemplate.query(
-                "SELECT * FROM atendimento WHERE categoria = ?",
-                new Object[]{categoria},
-                atendimentoRowMapper
-        );
+    public List<Map<String, Object>> getAtendimentosPorPeriodo(LocalDate dataInicio, LocalDate dataFim) {
+        String sql = "SELECT DATE(data_atendimento) as data, COUNT(*) as total " +
+                "FROM atendimento " +
+                "WHERE data_atendimento BETWEEN ? AND ? " +
+                "GROUP BY DATE(data_atendimento)";
+        return jdbcTemplate.queryForList(sql, Date.valueOf(dataInicio), Date.valueOf(dataFim));
     }
 }

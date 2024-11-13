@@ -46,11 +46,9 @@ public class EnderecoRepository {
     }
 
     public Endereco save(Endereco endereco) {
-        String sql = "INSERT INTO endereco " +
-                "(id_endereco, cep, rua, numero, bairro, cidade, estado, complemento) " +
+        String sql = "INSERT INTO endereco (id_endereco, cep, rua, numero, bairro, cidade, estado, complemento) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
-                "ON DUPLICATE KEY UPDATE " +
-                "cep = ?, rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, complemento = ?";
+                "ON DUPLICATE KEY UPDATE cep = ?, rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, complemento = ?";
 
         jdbcTemplate.update(sql,
                 endereco.getIdEndereco(),
@@ -61,7 +59,6 @@ public class EnderecoRepository {
                 endereco.getCidade(),
                 endereco.getEstado(),
                 endereco.getComplemento(),
-                // Valores para UPDATE
                 endereco.getCep(),
                 endereco.getRua(),
                 endereco.getNumero(),

@@ -1,8 +1,6 @@
 package com.MarketPet.MarketPet.Repository;
 
 import com.MarketPet.MarketPet.Model.Venda;
-import com.MarketPet.MarketPet.Model.Comprador;
-import com.MarketPet.MarketPet.Model.Produto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,30 +17,13 @@ public class VendaRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private CompradorRepository compradorRepository;
-
-    @Autowired
-    private ProdutoRepository produtoRepository;
-
     private RowMapper<Venda> vendaRowMapper = (rs, rowNum) -> {
         Venda venda = new Venda();
         venda.setIdVenda(rs.getInt("id_venda"));
-
-        // Busca do Comprador
-        Long cpfComprador = rs.getLong("cpf_comprador");
-        Optional<Comprador> compradorOpt = compradorRepository.findByCpf(cpfComprador);
-        compradorOpt.ifPresent(venda::setComprador);
-
-        // Busca do Produto
-        Integer codigoProduto = rs.getInt("codigo_produto");
-        Optional<Produto> produtoOpt = produtoRepository.findByCodigo(codigoProduto);
-        produtoOpt.ifPresent(venda::setProduto);
-
-        // Conversão de Date para LocalDate
+        venda.setCpfComprador(rs.getLong("cpf_comprador"));
+        venda.setCodigoProduto(rs.getInt("codigo_produto"));
         Date dataVenda = rs.getDate("data_venda");
         venda.setDataVenda(dataVenda != null ? dataVenda.toLocalDate() : null);
-
         return venda;
     };
 
@@ -64,20 +45,17 @@ public class VendaRepository {
     }
 
     public Venda save(Venda venda) {
-        String sql = "INSERT INTO venda " +
-                "(id_venda, cpf_comprador, codigo_produto, data_venda) " +
+        String sql = "INSERT INTO venda (id_venda, cpf_comprador, codigo_produto, data_venda) " +
                 "VALUES (?, ?, ?, ?) " +
-                "ON DUPLICATE KEY UPDATE " +
-                "cpf_comprador = ?, codigo_produto = ?, data_venda = ?";
+                "ON DUPLICATE KEY UPDATE cpf_comprador = ?, codigo_produto = ?, data_venda = ?";
 
         jdbcTemplate.update(sql,
                 venda.getIdVenda(),
-                venda.getComprador().getCpf(),
-                venda.getProduto().getCodigoProduto(),
+                venda.getCpfComprador(),
+                venda.getCodigoProduto(),
                 Date.valueOf(venda.getDataVenda()),
-                // Valores para UPDATE
-                venda.getComprador().getCpf(),
-                venda.getProduto().getCodigoProduto(),
+                venda.getCpfComprador(),
+                venda.getCodigoProduto(),
                 Date.valueOf(venda.getDataVenda())
         );
 

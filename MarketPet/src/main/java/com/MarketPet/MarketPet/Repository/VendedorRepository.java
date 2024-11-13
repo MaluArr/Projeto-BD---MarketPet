@@ -22,28 +22,10 @@ public class VendedorRepository {
         vendedor.setCpf(rs.getLong("CPF"));
         vendedor.setDescricao(rs.getString("descricao"));
         vendedor.setFotoPerfil(rs.getString("foto_perfil"));
-
-        // Conversão de tipos para BigDecimal
-        vendedor.setTotalVendas(
-                rs.getBigDecimal("total_vendas") != null
-                        ? rs.getBigDecimal("total_vendas")
-                        : BigDecimal.ZERO
-        );
-
-        vendedor.setAvaliacaoMedia(
-                rs.getBigDecimal("avaliacao_media") != null
-                        ? rs.getBigDecimal("avaliacao_media")
-                        : BigDecimal.ZERO
-        );
-
-        // Conversão de Date para LocalDate
+        vendedor.setTotalVendas(rs.getBigDecimal("total_vendas"));
+        vendedor.setAvaliacaoMedia(rs.getBigDecimal("avaliacao_media"));
         Date dataInicioVendas = rs.getDate("data_inicio_vendas");
-        vendedor.setDataInicioVendas(
-                dataInicioVendas != null
-                        ? dataInicioVendas.toLocalDate()
-                        : null
-        );
-
+        vendedor.setDataInicioVendas(dataInicioVendas != null ? dataInicioVendas.toLocalDate() : null);
         return vendedor;
     };
 
@@ -67,8 +49,7 @@ public class VendedorRepository {
     public Vendedor save(Vendedor vendedor) {
         String sql = "INSERT INTO vendedor (CPF, descricao, foto_perfil, total_vendas, avaliacao_media, data_inicio_vendas) " +
                 "VALUES (?, ?, ?, ?, ?, ?) " +
-                "ON DUPLICATE KEY UPDATE " +
-                "descricao = ?, foto_perfil = ?, total_vendas = ?, avaliacao_media = ?";
+                "ON DUPLICATE KEY UPDATE descricao = ?, foto_perfil = ?, total_vendas = ?, avaliacao_media = ?";
 
         jdbcTemplate.update(sql,
                 vendedor.getCpf(),
@@ -77,7 +58,6 @@ public class VendedorRepository {
                 vendedor.getTotalVendas(),
                 vendedor.getAvaliacaoMedia(),
                 Date.valueOf(vendedor.getDataInicioVendas()),
-                // Valores para UPDATE
                 vendedor.getDescricao(),
                 vendedor.getFotoPerfil(),
                 vendedor.getTotalVendas(),

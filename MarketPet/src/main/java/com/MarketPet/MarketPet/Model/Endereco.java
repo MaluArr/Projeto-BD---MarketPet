@@ -13,8 +13,7 @@ public class Endereco {
     private String complemento;
 
     // Construtores
-    public Endereco() {
-    }
+    public Endereco() {}
 
     public Endereco(Integer idEndereco, String cep, String rua, String numero,
                     String bairro, String cidade, String estado, String complemento) {

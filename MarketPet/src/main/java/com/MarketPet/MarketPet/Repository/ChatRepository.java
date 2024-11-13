@@ -1,8 +1,6 @@
 package com.MarketPet.MarketPet.Repository;
 
 import com.MarketPet.MarketPet.Model.Chat;
-import com.MarketPet.MarketPet.Model.Vendedor;
-import com.MarketPet.MarketPet.Model.Comprador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,36 +16,17 @@ public class ChatRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private VendedorRepository vendedorRepository;
-
-    @Autowired
-    private CompradorRepository compradorRepository;
-
     private RowMapper<Chat> chatRowMapper = (rs, rowNum) -> {
         Chat chat = new Chat();
         chat.setIdChat(rs.getInt("id_chat"));
-
-        // Busca do Vendedor
-        Long cpfVendedor = rs.getLong("cpf_vendedor");
-        Optional<Vendedor> vendedorOpt = vendedorRepository.findByCpf(cpfVendedor);
-        vendedorOpt.ifPresent(chat::setVendedor);
-
-        // Busca do Comprador
-        Long cpfComprador = rs.getLong("cpf_comprador");
-        Optional<Comprador> compradorOpt = compradorRepository.findByCpf(cpfComprador);
-        compradorOpt.ifPresent(chat::setComprador);
-
+        chat.setCpfVendedor(rs.getLong("cpf_vendedor"));
+        chat.setCpfComprador(rs.getLong("cpf_comprador"));
         chat.setCodigoChatvc(rs.getString("codigo_chatvc"));
         chat.setConteudo(rs.getString("conteudo"));
-
-        // Conversão de Date para LocalDate
         Date dataCriacao = rs.getDate("data_criacao");
         chat.setDataCriacao(dataCriacao != null ? dataCriacao.toLocalDate() : null);
-
         Date ultimaAtualizacao = rs.getDate("ultima_atualizacao");
         chat.setUltimaAtualizacao(ultimaAtualizacao != null ? ultimaAtualizacao.toLocalDate() : null);
-
         return chat;
     };
 
@@ -82,25 +61,16 @@ public class ChatRepository {
     }
 
     public Chat save(Chat chat) {
-        String sql = "INSERT INTO chat_v_x_c " +
-                "(id_chat, cpf_vendedor, cpf_comprador, codigo_chatvc, conteudo, data_criacao, ultima_atualizacao) " +
+        String sql = "INSERT INTO chat_v_x_c (id_chat, cpf_vendedor, cpf_comprador, codigo_chatvc, conteudo, data_criacao, ultima_atualizacao) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
                 "cpf_vendedor = ?, cpf_comprador = ?, codigo_chatvc = ?, conteudo = ?, ultima_atualizacao = ?";
 
         jdbcTemplate.update(sql,
-                chat.getIdChat(),
-                chat.getVendedor().getCpf(),
-                chat.getComprador().getCpf(),
-                chat.getCodigoChatvc(),
-                chat.getConteudo(),
-                Date.valueOf(chat.getDataCriacao()),
-                Date.valueOf(chat.getUltimaAtualizacao()),
-                // Valores para UPDATE
-                chat.getVendedor().getCpf(),
-                chat.getComprador().getCpf(),
-                chat.getCodigoChatvc(),
-                chat.getConteudo(),
+                chat.getIdChat(), chat.getCpfVendedor(), chat.getCpfComprador(),
+                chat.getCodigoChatvc(), chat.getConteudo(), Date.valueOf(chat.getDataCriacao()),
+                Date.valueOf(chat.getUltimaAtualizacao()), chat.getCpfVendedor(),
+                chat.getCpfComprador(), chat.getCodigoChatvc(), chat.getConteudo(),
                 Date.valueOf(chat.getUltimaAtualizacao())
         );
 

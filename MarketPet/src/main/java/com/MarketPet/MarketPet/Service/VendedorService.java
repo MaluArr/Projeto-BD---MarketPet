@@ -28,11 +28,9 @@ public class VendedorService {
     }
 
     public Vendedor criarVendedor(Vendedor vendedor) {
-        // Verifica se o CPF existe como usuário
         usuarioRepository.findByCpf(vendedor.getCpf())
                 .orElseThrow(() -> new RuntimeException("CPF não encontrado como usuário"));
 
-        // Validações
         if (!vendedor.isAvaliacaoValida()) {
             throw new RuntimeException("Avaliação média inválida");
         }
@@ -45,11 +43,9 @@ public class VendedorService {
     }
 
     public Vendedor atualizarVendedor(Vendedor vendedor) {
-        // Verifica se o vendedor existe
         vendedorRepository.findByCpf(vendedor.getCpf())
                 .orElseThrow(() -> new RuntimeException("Vendedor não encontrado"));
 
-        // Validações
         if (!vendedor.isAvaliacaoValida()) {
             throw new RuntimeException("Avaliação média inválida");
         }

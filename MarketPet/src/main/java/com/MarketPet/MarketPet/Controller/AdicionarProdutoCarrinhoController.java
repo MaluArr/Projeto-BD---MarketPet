@@ -48,19 +48,4 @@ public class AdicionarProdutoCarrinhoController {
         adicionarProdutoCarrinhoService.deletarProdutoCarrinho(id);
         return ResponseEntity.noContent().build();
     }
-
-    @GetMapping("/comprador/{cpfComprador}")
-    public List<AdicionarProdutoCarrinho> buscarPorComprador(@PathVariable Long cpfComprador) {
-        return adicionarProdutoCarrinhoService.buscarPorComprador(cpfComprador);
-    }
-
-    @GetMapping("/produto/{codigoProduto}")
-    public List<AdicionarProdutoCarrinho> buscarPorProduto(@PathVariable Integer codigoProduto) {
-        return adicionarProdutoCarrinhoService.buscarPorProduto(codigoProduto);
-    }
-
-    @GetMapping("/carrinho/{idCarrinho}")
-    public List<AdicionarProdutoCarrinho> buscarPorCarrinho(@PathVariable Integer idCarrinho) {
-        return adicionarProdutoCarrinhoService.buscarPorCarrinho(idCarrinho);
-    }
 }

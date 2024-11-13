@@ -1,8 +1,6 @@
 package com.MarketPet.MarketPet.Repository;
 
 import com.MarketPet.MarketPet.Model.Curadoria;
-import com.MarketPet.MarketPet.Model.Curador;
-import com.MarketPet.MarketPet.Model.Produto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,28 +15,13 @@ public class CuradoriaRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private CuradorRepository curadorRepository;
-
-    @Autowired
-    private ProdutoRepository produtoRepository;
-
     private RowMapper<Curadoria> curadoriaRowMapper = (rs, rowNum) -> {
         Curadoria curadoria = new Curadoria();
         curadoria.setCodigoCuradoria(rs.getInt("codigo_curadoria"));
         curadoria.setDescricao(rs.getString("descricao"));
         curadoria.setResultadoCuradoria(rs.getString("resultado_curadoria"));
-
-        // Busca do Curador
-        Integer idCurador = rs.getInt("id_curador");
-        Optional<Curador> curadorOpt = curadorRepository.findById(idCurador);
-        curadorOpt.ifPresent(curadoria::setCurador);
-
-        // Busca do Produto
-        Integer codigoProduto = rs.getInt("codigo_produto");
-        Optional<Produto> produtoOpt = produtoRepository.findByCodigo(codigoProduto);
-        produtoOpt.ifPresent(curadoria::setProduto);
-
+        curadoria.setIdCurador(rs.getInt("id_curador"));
+        curadoria.setCodigoProduto(rs.getInt("codigo_produto"));
         return curadoria;
     };
 
@@ -60,8 +43,7 @@ public class CuradoriaRepository {
     }
 
     public Curadoria save(Curadoria curadoria) {
-        String sql = "INSERT INTO curadoria " +
-                "(codigo_curadoria, descricao, resultado_curadoria, id_curador, codigo_produto) " +
+        String sql = "INSERT INTO curadoria (codigo_curadoria, descricao, resultado_curadoria, id_curador, codigo_produto) " +
                 "VALUES (?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
                 "descricao = ?, resultado_curadoria = ?, id_curador = ?, codigo_produto = ?";
@@ -70,13 +52,12 @@ public class CuradoriaRepository {
                 curadoria.getCodigoCuradoria(),
                 curadoria.getDescricao(),
                 curadoria.getResultadoCuradoria(),
-                curadoria.getCurador().getIdCurador(),
-                curadoria.getProduto().getCodigoProduto(),
-                // Valores para UPDATE
+                curadoria.getIdCurador(),
+                curadoria.getCodigoProduto(),
                 curadoria.getDescricao(),
                 curadoria.getResultadoCuradoria(),
-                curadoria.getCurador().getIdCurador(),
-                curadoria.getProduto().getCodigoProduto()
+                curadoria.getIdCurador(),
+                curadoria.getCodigoProduto()
         );
 
         return curadoria;

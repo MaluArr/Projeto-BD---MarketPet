@@ -6,25 +6,15 @@ import java.util.Objects;
 public class Carrinho {
     private Integer idCarrinho;
     private BigDecimal valorTotal;
-    private Comprador comprador;
+    private Long cpfComprador;
 
     // Construtores
-    public Carrinho() {
-    }
+    public Carrinho() {}
 
-    public Carrinho(Integer idCarrinho, BigDecimal valorTotal, Comprador comprador) {
+    public Carrinho(Integer idCarrinho, BigDecimal valorTotal, Long cpfComprador) {
         this.idCarrinho = idCarrinho;
         this.valorTotal = valorTotal;
-        this.comprador = comprador;
-    }
-
-    // Validações personalizadas
-    public boolean isCompradorValido() {
-        return comprador != null && comprador.getCpf() != null;
-    }
-
-    public boolean isValorTotalValido() {
-        return valorTotal != null && valorTotal.compareTo(BigDecimal.ZERO) >= 0;
+        this.cpfComprador = cpfComprador;
     }
 
     // Getters e Setters
@@ -44,15 +34,15 @@ public class Carrinho {
         this.valorTotal = valorTotal;
     }
 
-    public Comprador getComprador() {
-        return comprador;
+    public Long getCpfComprador() {
+        return cpfComprador;
     }
 
-    public void setComprador(Comprador comprador) {
-        this.comprador = comprador;
+    public void setCpfComprador(Long cpfComprador) {
+        this.cpfComprador = cpfComprador;
     }
 
-    // Métodos equals e hashCode
+    // Métodos equals, hashCode e toString
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -66,13 +56,12 @@ public class Carrinho {
         return Objects.hash(idCarrinho);
     }
 
-    // Método toString
     @Override
     public String toString() {
         return "Carrinho{" +
                 "idCarrinho=" + idCarrinho +
                 ", valorTotal=" + valorTotal +
-                ", comprador=" + (comprador != null ? comprador.getCpf() : "N/A") +
+                ", cpfComprador=" + cpfComprador +
                 '}';
     }
 }

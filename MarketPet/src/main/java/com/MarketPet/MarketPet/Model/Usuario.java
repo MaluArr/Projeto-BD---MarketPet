@@ -12,8 +12,7 @@ public class Usuario {
     private Integer telefone2;
 
     // Construtores
-    public Usuario() {
-    }
+    public Usuario() {}
 
     public Usuario(Long cpf, String nomeReal, String nomeUsuario, String email, String senha, Integer telefone1, Integer telefone2) {
         this.cpf = cpf;

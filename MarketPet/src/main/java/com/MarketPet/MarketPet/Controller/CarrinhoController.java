@@ -3,12 +3,11 @@ package com.MarketPet.MarketPet.Controller;
 import com.MarketPet.MarketPet.Model.Carrinho;
 import com.MarketPet.MarketPet.Service.CarrinhoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/carrinhos")
@@ -22,43 +21,43 @@ public class CarrinhoController {
         return carrinhoService.listarTodos();
     }
 
-    @GetMapping("/{idCarrinho}")
-    public ResponseEntity<Carrinho> buscarPorId(@PathVariable Integer idCarrinho) {
-        return carrinhoService.buscarPorId(idCarrinho)
+    @GetMapping("/{id}")
+    public ResponseEntity<Carrinho> buscarPorId(@PathVariable Integer id) {
+        return carrinhoService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Carrinho> criarCarrinho(@RequestBody Carrinho carrinho) {
-        Carrinho novoCarrinho = carrinhoService.criarCarrinho(carrinho);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoCarrinho);
+    public Carrinho criarCarrinho(@RequestBody Carrinho carrinho) {
+        return carrinhoService.salvarCarrinho(carrinho);
     }
 
-    @PutMapping("/{idCarrinho}")
-    public ResponseEntity<Carrinho> atualizarCarrinho(
-            @PathVariable Integer idCarrinho,
-            @RequestBody Carrinho carrinho) {
-        carrinho.setIdCarrinho(idCarrinho);
-        Carrinho carrinhoAtualizado = carrinhoService.atualizarCarrinho(carrinho);
-        return ResponseEntity.ok(carrinhoAtualizado);
+    @PutMapping("/{id}")
+    public ResponseEntity<Carrinho> atualizarCarrinho(@PathVariable Integer id, @RequestBody Carrinho carrinho) {
+        if (!carrinhoService.buscarPorId(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        carrinho.setIdCarrinho(id);
+        return ResponseEntity.ok(carrinhoService.salvarCarrinho(carrinho));
     }
 
-    @DeleteMapping("/{idCarrinho}")
-    public ResponseEntity<Void> deletarCarrinho(@PathVariable Integer idCarrinho) {
-        carrinhoService.deletarCarrinho(idCarrinho);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarCarrinho(@PathVariable Integer id) {
+        if (!carrinhoService.buscarPorId(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        carrinhoService.deletarCarrinho(id);
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/comprador/{cpfComprador}")
-    public ResponseEntity<Carrinho> buscarPorComprador(@PathVariable Long cpfComprador) {
-        return carrinhoService.buscarPorComprador(cpfComprador)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/relatorio/por-comprador")
+    public List<Map<String, Object>> relatorioCarrinhosPorComprador() {
+        return carrinhoService.gerarRelatorioCarrinhosPorComprador();
     }
 
-    @GetMapping("/valor-acima/{valorMinimo}")
-    public List<Carrinho> buscarCarrinhosComValorAcimaDe(@PathVariable BigDecimal valorMinimo) {
-        return carrinhoService.buscarCarrinhosComValorAcimaDe(valorMinimo);
+    @GetMapping("/relatorio/por-valor")
+    public List<Map<String, Object>> relatorioCarrinhosPorValor() {
+        return carrinhoService.gerarRelatorioCarrinhosPorValor();
     }
 }

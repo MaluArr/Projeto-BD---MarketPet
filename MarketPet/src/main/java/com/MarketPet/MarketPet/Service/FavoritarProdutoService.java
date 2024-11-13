@@ -2,8 +2,6 @@ package com.MarketPet.MarketPet.Service;
 
 import com.MarketPet.MarketPet.Model.FavoritarProduto;
 import com.MarketPet.MarketPet.Repository.FavoritarProdutoRepository;
-import com.MarketPet.MarketPet.Repository.CompradorRepository;
-import com.MarketPet.MarketPet.Repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +15,6 @@ public class FavoritarProdutoService {
     @Autowired
     private FavoritarProdutoRepository favoritarProdutoRepository;
 
-    @Autowired
-    private CompradorRepository compradorRepository;
-
-    @Autowired
-    private ProdutoRepository produtoRepository;
-
     public List<FavoritarProduto> listarTodos() {
         return favoritarProdutoRepository.findAll();
     }
@@ -32,7 +24,6 @@ public class FavoritarProdutoService {
     }
 
     public FavoritarProduto criarFavoritarProduto(FavoritarProduto favoritarProduto) {
-        // Validações
         if (!favoritarProduto.isCompradorValido()) {
             throw new RuntimeException("Comprador inválido");
         }
@@ -45,28 +36,17 @@ public class FavoritarProdutoService {
             throw new RuntimeException("Nome da lista inválido");
         }
 
-        // Define data de criação como hoje se não for especificada
         if (favoritarProduto.getDataCriacao() == null) {
             favoritarProduto.setDataCriacao(LocalDate.now());
         }
-
-        // Verifica existência do comprador
-        compradorRepository.findByCpf(favoritarProduto.getComprador().getCpf())
-                .orElseThrow(() -> new RuntimeException("Comprador não encontrado"));
-
-        // Verifica existência do produto
-        produtoRepository.findByCodigo(favoritarProduto.getProduto().getCodigoProduto())
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
         return favoritarProdutoRepository.save(favoritarProduto);
     }
 
     public FavoritarProduto atualizarFavoritarProduto(FavoritarProduto favoritarProduto) {
-        // Verifica se o favoritar produto existe
         favoritarProdutoRepository.findById(favoritarProduto.getIdLista())
                 .orElseThrow(() -> new RuntimeException("Favoritar produto não encontrado"));
 
-        // Validações
         if (!favoritarProduto.isCompradorValido()) {
             throw new RuntimeException("Comprador inválido");
         }
@@ -78,14 +58,6 @@ public class FavoritarProdutoService {
         if (!favoritarProduto.isNomeListaValido()) {
             throw new RuntimeException("Nome da lista inválido");
         }
-
-        // Verifica existência do comprador
-        compradorRepository.findByCpf(favoritarProduto.getComprador().getCpf())
-                .orElseThrow(() -> new RuntimeException("Comprador não encontrado"));
-
-        // Verifica existência do produto
-        produtoRepository.findByCodigo(favoritarProduto.getProduto().getCodigoProduto())
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
         return favoritarProdutoRepository.save(favoritarProduto);
     }

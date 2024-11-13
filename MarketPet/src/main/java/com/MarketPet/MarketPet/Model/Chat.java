@@ -5,23 +5,22 @@ import java.util.Objects;
 
 public class Chat {
     private Integer idChat;
-    private Vendedor vendedor;
-    private Comprador comprador;
+    private Long cpfVendedor;
+    private Long cpfComprador;
     private String codigoChatvc;
     private String conteudo;
     private LocalDate dataCriacao;
     private LocalDate ultimaAtualizacao;
 
     // Construtores
-    public Chat() {
-    }
+    public Chat() {}
 
-    public Chat(Integer idChat, Vendedor vendedor, Comprador comprador,
+    public Chat(Integer idChat, Long cpfVendedor, Long cpfComprador,
                 String codigoChatvc, String conteudo,
                 LocalDate dataCriacao, LocalDate ultimaAtualizacao) {
         this.idChat = idChat;
-        this.vendedor = vendedor;
-        this.comprador = comprador;
+        this.cpfVendedor = cpfVendedor;
+        this.cpfComprador = cpfComprador;
         this.codigoChatvc = codigoChatvc;
         this.conteudo = conteudo;
         this.dataCriacao = dataCriacao;
@@ -48,20 +47,20 @@ public class Chat {
         this.idChat = idChat;
     }
 
-    public Vendedor getVendedor() {
-        return vendedor;
+    public Long getCpfVendedor() {
+        return cpfVendedor;
     }
 
-    public void setVendedor(Vendedor vendedor) {
-        this.vendedor = vendedor;
+    public void setCpfVendedor(Long cpfVendedor) {
+        this.cpfVendedor = cpfVendedor;
     }
 
-    public Comprador getComprador() {
-        return comprador;
+    public Long getCpfComprador() {
+        return cpfComprador;
     }
 
-    public void setComprador(Comprador comprador) {
-        this.comprador = comprador;
+    public void setCpfComprador(Long cpfComprador) {
+        this.cpfComprador = cpfComprador;
     }
 
     public String getCodigoChatvc() {
@@ -116,8 +115,8 @@ public class Chat {
     public String toString() {
         return "Chat{" +
                 "idChat=" + idChat +
-                ", vendedor=" + (vendedor != null ? vendedor.getCpf() : "N/A") +
-                ", comprador=" + (comprador != null ? comprador.getCpf() : "N/A") +
+                ", cpfVendedor=" + cpfVendedor +
+                ", cpfComprador=" + cpfComprador +
                 ", codigoChatvc='" + codigoChatvc + '\'' +
                 ", dataCriacao=" + dataCriacao +
                 ", ultimaAtualizacao=" + ultimaAtualizacao +

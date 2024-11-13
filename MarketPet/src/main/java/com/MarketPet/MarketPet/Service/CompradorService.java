@@ -27,16 +27,14 @@ public class CompradorService {
     }
 
     public Comprador criarComprador(Comprador comprador) {
-        // Verifica se o CPF existe como usuário
         usuarioRepository.findByCpf(comprador.getCpf())
                 .orElseThrow(() -> new RuntimeException("CPF não encontrado como usuário"));
 
-        // Validações
-        if (comprador.getEndereco() != null && !comprador.isEnderecoValido()) {
+        if (comprador.getIdEndereco() != null && !comprador.isEnderecoValido()) {
             throw new RuntimeException("Endereço inválido");
         }
 
-        if (comprador.getCartao() != null && !comprador.isCartaoValido()) {
+        if (comprador.getIdCartao() != null && !comprador.isCartaoValido()) {
             throw new RuntimeException("Cartão inválido");
         }
 
@@ -44,16 +42,14 @@ public class CompradorService {
     }
 
     public Comprador atualizarComprador(Comprador comprador) {
-        // Verifica se o comprador existe
         compradorRepository.findByCpf(comprador.getCpf())
                 .orElseThrow(() -> new RuntimeException("Comprador não encontrado"));
 
-        // Validações
-        if (comprador.getEndereco() != null && !comprador.isEnderecoValido()) {
+        if (comprador.getIdEndereco() != null && !comprador.isEnderecoValido()) {
             throw new RuntimeException("Endereço inválido");
         }
 
-        if (comprador.getCartao() != null && !comprador.isCartaoValido()) {
+        if (comprador.getIdCartao() != null && !comprador.isCartaoValido()) {
             throw new RuntimeException("Cartão inválido");
         }
 

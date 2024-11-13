@@ -23,7 +23,6 @@ public class EnderecoService {
     }
 
     public Endereco criarEndereco(Endereco endereco) {
-        // Validações
         if (!endereco.isCepValido()) {
             throw new RuntimeException("CEP inválido");
         }
@@ -36,11 +35,9 @@ public class EnderecoService {
     }
 
     public Endereco atualizarEndereco(Endereco endereco) {
-        // Verifica se o endereço existe
         enderecoRepository.findById(endereco.getIdEndereco())
                 .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
 
-        // Validações
         if (!endereco.isCepValido()) {
             throw new RuntimeException("CEP inválido");
         }

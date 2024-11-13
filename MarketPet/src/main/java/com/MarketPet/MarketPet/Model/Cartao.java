@@ -12,8 +12,7 @@ public class Cartao {
     private String bandeira;
 
     // Construtores
-    public Cartao() {
-    }
+    public Cartao() {}
 
     public Cartao(Integer idCartao, String numero, String nomeTitular,
                   LocalDate validade, String cvv, String bandeira) {
@@ -27,17 +26,14 @@ public class Cartao {
 
     // Validações personalizadas
     public boolean isNumeroCartaoValido() {
-        // Validação básica de número de cartão (pode ser melhorada)
         return numero != null && numero.matches("\\d{16}");
     }
 
     public boolean isCvvValido() {
-        // Validação de CVV (3 ou 4 dígitos)
         return cvv != null && cvv.matches("\\d{3,4}");
     }
 
     public boolean isValidadeValida() {
-        // Verifica se a validade não está expirada
         return validade != null && !validade.isBefore(LocalDate.now());
     }
 

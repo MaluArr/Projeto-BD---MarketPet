@@ -4,20 +4,19 @@ import java.util.Objects;
 
 public class Curador {
     private Integer idCurador;
-    private Funcionario funcionario;
+    private Long cpfFuncionario;
 
     // Construtores
-    public Curador() {
-    }
+    public Curador() {}
 
-    public Curador(Integer idCurador, Funcionario funcionario) {
+    public Curador(Integer idCurador, Long cpfFuncionario) {
         this.idCurador = idCurador;
-        this.funcionario = funcionario;
+        this.cpfFuncionario = cpfFuncionario;
     }
 
     // Validações personalizadas
     public boolean isFuncionarioValido() {
-        return funcionario != null && funcionario.getCpfFuncionario() != null;
+        return cpfFuncionario != null;
     }
 
     // Getters e Setters
@@ -29,12 +28,12 @@ public class Curador {
         this.idCurador = idCurador;
     }
 
-    public Funcionario getFuncionario() {
-        return funcionario;
+    public Long getCpfFuncionario() {
+        return cpfFuncionario;
     }
 
-    public void setFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
+    public void setCpfFuncionario(Long cpfFuncionario) {
+        this.cpfFuncionario = cpfFuncionario;
     }
 
     // Métodos equals e hashCode
@@ -56,7 +55,7 @@ public class Curador {
     public String toString() {
         return "Curador{" +
                 "idCurador=" + idCurador +
-                ", funcionario=" + (funcionario != null ? funcionario.getCpfFuncionario() : "N/A") +
+                ", cpfFuncionario=" + (cpfFuncionario != null ? cpfFuncionario : "N/A") +
                 '}';
     }
 }

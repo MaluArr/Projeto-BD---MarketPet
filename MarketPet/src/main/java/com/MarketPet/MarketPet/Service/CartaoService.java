@@ -23,7 +23,6 @@ public class CartaoService {
     }
 
     public Cartao criarCartao(Cartao cartao) {
-        // Validações
         if (!cartao.isNumeroCartaoValido()) {
             throw new RuntimeException("Número do cartão inválido");
         }
@@ -36,7 +35,6 @@ public class CartaoService {
             throw new RuntimeException("Cartão expirado ou data de validade inválida");
         }
 
-        // Verifica se o número do cartão já existe
         if (cartaoRepository.existsByNumero(cartao.getNumero())) {
             throw new RuntimeException("Número de cartão já cadastrado");
         }
@@ -45,11 +43,9 @@ public class CartaoService {
     }
 
     public Cartao atualizarCartao(Cartao cartao) {
-        // Verifica se o cartão existe
         cartaoRepository.findById(cartao.getIdCartao())
                 .orElseThrow(() -> new RuntimeException("Cartão não encontrado"));
 
-        // Validações
         if (!cartao.isNumeroCartaoValido()) {
             throw new RuntimeException("Número do cartão inválido");
         }

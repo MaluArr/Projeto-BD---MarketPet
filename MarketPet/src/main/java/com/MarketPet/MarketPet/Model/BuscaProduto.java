@@ -5,27 +5,26 @@ import java.util.Objects;
 
 public class BuscaProduto {
     private Integer idBusca;
-    private Comprador comprador;
-    private Produto produto;
-    private Float preco;
+    private Long cpfComprador;
+    private Integer codigoProduto;
+    private BigDecimal preco;
     private String regiao;
     private String categoria;
     private String cor;
     private String tamanho;
-    private Float avaliacao;
+    private BigDecimal avaliacao;
     private String descricaoBusca;
 
     // Construtores
-    public BuscaProduto() {
-    }
+    public BuscaProduto() {}
 
-    public BuscaProduto(Integer idBusca, Comprador comprador, Produto produto,
-                        Float preco, String regiao, String categoria,
-                        String cor, String tamanho, Float avaliacao,
+    public BuscaProduto(Integer idBusca, Long cpfComprador, Integer codigoProduto,
+                        BigDecimal preco, String regiao, String categoria,
+                        String cor, String tamanho, BigDecimal avaliacao,
                         String descricaoBusca) {
         this.idBusca = idBusca;
-        this.comprador = comprador;
-        this.produto = produto;
+        this.cpfComprador = cpfComprador;
+        this.codigoProduto = codigoProduto;
         this.preco = preco;
         this.regiao = regiao;
         this.categoria = categoria;
@@ -33,36 +32,6 @@ public class BuscaProduto {
         this.tamanho = tamanho;
         this.avaliacao = avaliacao;
         this.descricaoBusca = descricaoBusca;
-    }
-
-    // Validações personalizadas
-    public boolean isCompradorValido() {
-        return comprador != null && comprador.getCpf() != null;
-    }
-
-    public boolean isProdutoValido() {
-        return produto != null && produto.getCodigoProduto() != null;
-    }
-
-    public boolean isPrecoValido() {
-        return preco != null && preco > 0;
-    }
-
-    public boolean isCategoriaValida() {
-        return categoria != null && !categoria.trim().isEmpty() && categoria.length() <= 255;
-    }
-
-    public boolean isTamanhoValido() {
-        return tamanho != null && !tamanho.trim().isEmpty() && tamanho.length() <= 255;
-    }
-
-    public boolean isAvaliacaoValida() {
-        return avaliacao == null ||
-                (avaliacao >= 0 && avaliacao <= 5);
-    }
-
-    public boolean isDescricaoBuscaValida() {
-        return descricaoBusca != null && !descricaoBusca.trim().isEmpty();
     }
 
     // Getters e Setters
@@ -74,27 +43,27 @@ public class BuscaProduto {
         this.idBusca = idBusca;
     }
 
-    public Comprador getComprador() {
-        return comprador;
+    public Long getCpfComprador() {
+        return cpfComprador;
     }
 
-    public void setComprador(Comprador comprador) {
-        this.comprador = comprador;
+    public void setCpfComprador(Long cpfComprador) {
+        this.cpfComprador = cpfComprador;
     }
 
-    public Produto getProduto() {
-        return produto;
+    public Integer getCodigoProduto() {
+        return codigoProduto;
     }
 
-    public void setProduto(Produto produto) {
-        this.produto = produto;
+    public void setCodigoProduto(Integer codigoProduto) {
+        this.codigoProduto = codigoProduto;
     }
 
-    public Float getPreco() {
+    public BigDecimal getPreco() {
         return preco;
     }
 
-    public void setPreco(Float preco) {
+    public void setPreco(BigDecimal preco) {
         this.preco = preco;
     }
 
@@ -130,11 +99,11 @@ public class BuscaProduto {
         this.tamanho = tamanho;
     }
 
-    public Float getAvaliacao() {
+    public BigDecimal getAvaliacao() {
         return avaliacao;
     }
 
-    public void setAvaliacao(Float avaliacao) {
+    public void setAvaliacao(BigDecimal avaliacao) {
         this.avaliacao = avaliacao;
     }
 
@@ -146,7 +115,7 @@ public class BuscaProduto {
         this.descricaoBusca = descricaoBusca;
     }
 
-    // Métodos equals e hashCode
+    // Métodos equals, hashCode e toString
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -160,18 +129,19 @@ public class BuscaProduto {
         return Objects.hash(idBusca);
     }
 
-    // Método toString
     @Override
     public String toString() {
         return "BuscaProduto{" +
                 "idBusca=" + idBusca +
-                ", comprador=" + (comprador != null ? comprador.getCpf() : "N/A") +
-                ", produto=" + (produto != null ? produto.getCodigoProduto() : "N/A") +
+                ", cpfComprador=" + cpfComprador +
+                ", codigoProduto=" + codigoProduto +
                 ", preco=" + preco +
                 ", regiao='" + regiao + '\'' +
                 ", categoria='" + categoria + '\'' +
+                ", cor='" + cor + '\'' +
                 ", tamanho='" + tamanho + '\'' +
                 ", avaliacao=" + avaliacao +
+                ", descricaoBusca='" + descricaoBusca + '\'' +
                 '}';
     }
 }

@@ -5,28 +5,27 @@ import java.util.Objects;
 
 public class Venda {
     private Integer idVenda;
-    private Comprador comprador;
-    private Produto produto;
+    private Long cpfComprador;
+    private Integer codigoProduto;
     private LocalDate dataVenda;
 
     // Construtores
-    public Venda() {
-    }
+    public Venda() {}
 
-    public Venda(Integer idVenda, Comprador comprador, Produto produto, LocalDate dataVenda) {
+    public Venda(Integer idVenda, Long cpfComprador, Integer codigoProduto, LocalDate dataVenda) {
         this.idVenda = idVenda;
-        this.comprador = comprador;
-        this.produto = produto;
+        this.cpfComprador = cpfComprador;
+        this.codigoProduto = codigoProduto;
         this.dataVenda = dataVenda;
     }
 
     // Validações personalizadas
     public boolean isCompradorValido() {
-        return comprador != null && comprador.getCpf() != null;
+        return cpfComprador != null;
     }
 
     public boolean isProdutoValido() {
-        return produto != null && produto.getCodigoProduto() != null;
+        return codigoProduto != null;
     }
 
     public boolean isDataVendaValida() {
@@ -42,20 +41,20 @@ public class Venda {
         this.idVenda = idVenda;
     }
 
-    public Comprador getComprador() {
-        return comprador;
+    public Long getCpfComprador() {
+        return cpfComprador;
     }
 
-    public void setComprador(Comprador comprador) {
-        this.comprador = comprador;
+    public void setCpfComprador(Long cpfComprador) {
+        this.cpfComprador = cpfComprador;
     }
 
-    public Produto getProduto() {
-        return produto;
+    public Integer getCodigoProduto() {
+        return codigoProduto;
     }
 
-    public void setProduto(Produto produto) {
-        this.produto = produto;
+    public void setCodigoProduto(Integer codigoProduto) {
+        this.codigoProduto = codigoProduto;
     }
 
     public LocalDate getDataVenda() {
@@ -85,8 +84,8 @@ public class Venda {
     public String toString() {
         return "Venda{" +
                 "idVenda=" + idVenda +
-                ", comprador=" + (comprador != null ? comprador.getCpf() : "N/A") +
-                ", produto=" + (produto != null ? produto.getCodigoProduto() : "N/A") +
+                ", cpfComprador=" + cpfComprador +
+                ", codigoProduto=" + codigoProduto +
                 ", dataVenda=" + dataVenda +
                 '}';
     }

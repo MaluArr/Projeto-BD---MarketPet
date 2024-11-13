@@ -13,8 +13,7 @@ public class Vendedor {
     private LocalDate dataInicioVendas;
 
     // Construtores
-    public Vendedor() {
-    }
+    public Vendedor() {}
 
     public Vendedor(Long cpf, String descricao, String fotoPerfil,
                     BigDecimal totalVendas, BigDecimal avaliacaoMedia,

@@ -2,8 +2,6 @@ package com.MarketPet.MarketPet.Service;
 
 import com.MarketPet.MarketPet.Model.Chat;
 import com.MarketPet.MarketPet.Repository.ChatRepository;
-import com.MarketPet.MarketPet.Repository.VendedorRepository;
-import com.MarketPet.MarketPet.Repository.CompradorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +16,6 @@ public class ChatService {
     @Autowired
     private ChatRepository chatRepository;
 
-    @Autowired
-    private VendedorRepository vendedorRepository;
-
-    @Autowired
-    private CompradorRepository compradorRepository;
-
     public List<Chat> listarTodos() {
         return chatRepository.findAll();
     }
@@ -33,25 +25,14 @@ public class ChatService {
     }
 
     public Chat criarChat(Chat chat) {
-        // Validações
         if (!chat.isCodigoChatvcValido()) {
             throw new RuntimeException("Código do chat inválido");
         }
 
-        // Verifica existência do vendedor
-        vendedorRepository.findByCpf(chat.getVendedor().getCpf())
-                .orElseThrow(() -> new RuntimeException("Vendedor não encontrado"));
-
-        // Verifica existência do comprador
-        compradorRepository.findByCpf(chat.getComprador().getCpf())
-                .orElseThrow(() -> new RuntimeException("Comprador não encontrado"));
-
-        // Gera código único se não fornecido
         if (chat.getCodigoChatvc() == null) {
             chat.setCodigoChatvc(gerarCodigoUnico());
         }
 
-        // Define datas
         LocalDate dataAtual = LocalDate.now();
         chat.setDataCriacao(dataAtual);
         chat.setUltimaAtualizacao(dataAtual);
@@ -60,16 +41,13 @@ public class ChatService {
     }
 
     public Chat atualizarChat(Chat chat) {
-        // Busca chat existente
         Chat chatExistente = chatRepository.findById(chat.getIdChat())
                 .orElseThrow(() -> new RuntimeException("Chat não encontrado"));
 
-        // Validações
         if (!chat.isCodigoChatvcValido()) {
             throw new RuntimeException("Código do chat inválido");
         }
 
-        // Atualiza conteúdo e data
         chatExistente.setConteudo(chat.getConteudo());
         chatExistente.setUltimaAtualizacao(LocalDate.now());
 
@@ -95,7 +73,6 @@ public class ChatService {
         return chatRepository.findByCodigoChatvc(codigoChatvc);
     }
 
-    // Método para gerar código único
     private String gerarCodigoUnico() {
         return UUID.randomUUID().toString().substring(0, 20);
     }

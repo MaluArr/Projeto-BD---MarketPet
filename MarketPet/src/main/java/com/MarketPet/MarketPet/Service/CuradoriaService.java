@@ -31,7 +31,6 @@ public class CuradoriaService {
     }
 
     public Curadoria criarCuradoria(Curadoria curadoria) {
-        // Validações
         if (!curadoria.isDescricaoValida()) {
             throw new RuntimeException("Descrição da curadoria inválida");
         }
@@ -44,23 +43,19 @@ public class CuradoriaService {
             throw new RuntimeException("Produto inválido");
         }
 
-        // Verifica existência do curador
-        curadorRepository.findById(curadoria.getCurador().getIdCurador())
+        curadorRepository.findById(curadoria.getIdCurador())
                 .orElseThrow(() -> new RuntimeException("Curador não encontrado"));
 
-        // Verifica existência do produto
-        produtoRepository.findByCodigo(curadoria.getProduto().getCodigoProduto())
+        produtoRepository.findByCodigo(curadoria.getCodigoProduto())
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
         return curadoriaRepository.save(curadoria);
     }
 
     public Curadoria atualizarCuradoria(Curadoria curadoria) {
-        // Verifica se a curadoria existe
         curadoriaRepository.findByCodigo(curadoria.getCodigoCuradoria())
                 .orElseThrow(() -> new RuntimeException("Curadoria não encontrada"));
 
-        // Validações
         if (!curadoria.isDescricaoValida()) {
             throw new RuntimeException("Descrição da curadoria inválida");
         }
@@ -73,12 +68,10 @@ public class CuradoriaService {
             throw new RuntimeException("Produto inválido");
         }
 
-        // Verifica existência do curador
-        curadorRepository.findById(curadoria.getCurador().getIdCurador())
+        curadorRepository.findById(curadoria.getIdCurador())
                 .orElseThrow(() -> new RuntimeException("Curador não encontrado"));
 
-        // Verifica existência do produto
-        produtoRepository.findByCodigo(curadoria.getProduto().getCodigoProduto())
+        produtoRepository.findByCodigo(curadoria.getCodigoProduto())
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
         return curadoriaRepository.save(curadoria);

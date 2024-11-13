@@ -3,12 +3,11 @@ package com.MarketPet.MarketPet.Controller;
 import com.MarketPet.MarketPet.Model.Avaliacao;
 import com.MarketPet.MarketPet.Service.AvaliacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/avaliacoes")
@@ -18,59 +17,47 @@ public class AvaliacaoController {
     private AvaliacaoService avaliacaoService;
 
     @GetMapping
-    public List<Avaliacao> listarTodos() {
-        return avaliacaoService.listarTodos();
+    public List<Avaliacao> listarTodas() {
+        return avaliacaoService.listarTodas();
     }
 
-    @GetMapping("/{idAvaliacao}")
-    public ResponseEntity<Avaliacao> buscarPorId(@PathVariable Integer idAvaliacao) {
-        return avaliacaoService.buscarPorId(idAvaliacao)
+    @GetMapping("/{id}")
+    public ResponseEntity<Avaliacao> buscarPorId(@PathVariable Integer id) {
+        return avaliacaoService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Avaliacao> criarAvaliacao(@RequestBody Avaliacao avaliacao) {
-        Avaliacao novaAvaliacao = avaliacaoService.criarAvaliacao(avaliacao);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novaAvaliacao);
+    public Avaliacao criarAvaliacao(@RequestBody Avaliacao avaliacao) {
+        return avaliacaoService.salvarAvaliacao(avaliacao);
     }
 
-    @PutMapping("/{idAvaliacao}")
-    public ResponseEntity<Avaliacao> atualizarAvaliacao(
-            @PathVariable Integer idAvaliacao,
-            @RequestBody Avaliacao avaliacao) {
-        avaliacao.setIdAvaliacao(idAvaliacao);
-        Avaliacao avaliacaoAtualizada = avaliacaoService.atualizarAvaliacao(avaliacao);
-        return ResponseEntity.ok(avaliacaoAtualizada);
+    @PutMapping("/{id}")
+    public ResponseEntity<Avaliacao> atualizarAvaliacao(@PathVariable Integer id, @RequestBody Avaliacao avaliacao) {
+        if (!avaliacaoService.buscarPorId(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        avaliacao.setIdAvaliacao(id);
+        return ResponseEntity.ok(avaliacaoService.salvarAvaliacao(avaliacao));
     }
 
-    @DeleteMapping("/{idAvaliacao}")
-    public ResponseEntity<Void> deletarAvaliacao(@PathVariable Integer idAvaliacao) {
-        avaliacaoService.deletarAvaliacao(idAvaliacao);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarAvaliacao(@PathVariable Integer id) {
+        if (!avaliacaoService.buscarPorId(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        avaliacaoService.deletarAvaliacao(id);
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/comprador/{cpfComprador}")
-    public List<Avaliacao> buscarPorComprador(@PathVariable Long cpfComprador) {
-        return avaliacaoService.buscarPorComprador(cpfComprador);
+    @GetMapping("/relatorio/por-produto")
+    public List<Map<String, Object>> relatorioAvaliacoesPorProduto() {
+        return avaliacaoService.gerarRelatorioAvaliacoesPorProduto();
     }
 
-    @GetMapping("/produto/{codigoProduto}")
-    public List<Avaliacao> buscarPorProduto(@PathVariable Integer codigoProduto) {
-        return avaliacaoService.buscarPorProduto(codigoProduto);
-    }
-
-    @GetMapping("/venda/{idVenda}")
-    public ResponseEntity<Avaliacao> buscarPorVenda(@PathVariable Integer idVenda) {
-        return avaliacaoService.buscarPorVenda(idVenda)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/nota")
-    public List<Avaliacao> buscarPorIntervaloNota(
-            @RequestParam BigDecimal notaMinima,
-            @RequestParam BigDecimal notaMaxima) {
-        return avaliacaoService.buscarPorIntervaloNota(notaMinima, notaMaxima);
+    @GetMapping("/relatorio/por-comprador")
+    public List<Map<String, Object>> relatorioAvaliacoesPorComprador() {
+        return avaliacaoService.gerarRelatorioAvaliacoesPorComprador();
     }
 }

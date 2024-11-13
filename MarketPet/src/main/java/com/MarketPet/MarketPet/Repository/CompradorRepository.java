@@ -1,8 +1,6 @@
 package com.MarketPet.MarketPet.Repository;
 
 import com.MarketPet.MarketPet.Model.Comprador;
-import com.MarketPet.MarketPet.Model.Endereco;
-import com.MarketPet.MarketPet.Model.Cartao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,30 +15,11 @@ public class CompradorRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private EnderecoRepository enderecoRepository;
-
-    @Autowired
-    private CartaoRepository cartaoRepository;
-
     private RowMapper<Comprador> compradorRowMapper = (rs, rowNum) -> {
         Comprador comprador = new Comprador();
         comprador.setCpf(rs.getLong("CPF"));
-
-        // Busca o endereço
-        Integer idEndereco = rs.getInt("id_endereco");
-        if (idEndereco != 0) {
-            Optional<Endereco> enderecoOpt = enderecoRepository.findById(idEndereco);
-            enderecoOpt.ifPresent(comprador::setEndereco);
-        }
-
-        // Busca o cartão
-        Integer idCartao = rs.getInt("id_cartao");
-        if (idCartao != 0) {
-            Optional<Cartao> cartaoOpt = cartaoRepository.findById(idCartao);
-            cartaoOpt.ifPresent(comprador::setCartao);
-        }
-
+        comprador.setIdEndereco(rs.getInt("id_endereco"));
+        comprador.setIdCartao(rs.getInt("id_cartao"));
         return comprador;
     };
 
@@ -69,11 +48,10 @@ public class CompradorRepository {
 
         jdbcTemplate.update(sql,
                 comprador.getCpf(),
-                comprador.getEndereco() != null ? comprador.getEndereco().getIdEndereco() : null,
-                comprador.getCartao() != null ? comprador.getCartao().getIdCartao() : null,
-                // Valores para UPDATE
-                comprador.getEndereco() != null ? comprador.getEndereco().getIdEndereco() : null,
-                comprador.getCartao() != null ? comprador.getCartao().getIdCartao() : null
+                comprador.getIdEndereco(),
+                comprador.getIdCartao(),
+                comprador.getIdEndereco(),
+                comprador.getIdCartao()
         );
 
         return comprador;

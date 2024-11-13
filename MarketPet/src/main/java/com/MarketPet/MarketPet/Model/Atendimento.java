@@ -5,45 +5,23 @@ import java.util.Objects;
 
 public class Atendimento {
     private Integer idAtendimento;
-    private Funcionario funcionario;
-    private Usuario usuario;
-    private Chat chat;
+    private Long cpfFuncionario;
+    private Long cpfUsuario;
+    private Integer idChat;
     private LocalDate dataAtendimento;
     private String categoria;
 
     // Construtores
-    public Atendimento() {
-    }
+    public Atendimento() {}
 
-    public Atendimento(Integer idAtendimento, Funcionario funcionario, Usuario usuario,
-                       Chat chat, LocalDate dataAtendimento, String categoria) {
+    public Atendimento(Integer idAtendimento, Long cpfFuncionario, Long cpfUsuario,
+                       Integer idChat, LocalDate dataAtendimento, String categoria) {
         this.idAtendimento = idAtendimento;
-        this.funcionario = funcionario;
-        this.usuario = usuario;
-        this.chat = chat;
+        this.cpfFuncionario = cpfFuncionario;
+        this.cpfUsuario = cpfUsuario;
+        this.idChat = idChat;
         this.dataAtendimento = dataAtendimento;
         this.categoria = categoria;
-    }
-
-    // Validações personalizadas
-    public boolean isFuncionarioValido() {
-        return funcionario != null && funcionario.getCpfFuncionario() != null;
-    }
-
-    public boolean isUsuarioValido() {
-        return usuario != null && usuario.getCpf() != null;
-    }
-
-    public boolean isChatValido() {
-        return chat != null && chat.getIdChat() != null;
-    }
-
-    public boolean isCategoriaValida() {
-        return categoria != null && !categoria.trim().isEmpty() && categoria.length() <= 255;
-    }
-
-    public boolean isDataAtendimentoValida() {
-        return dataAtendimento != null && !dataAtendimento.isAfter(LocalDate.now());
     }
 
     // Getters e Setters
@@ -55,28 +33,28 @@ public class Atendimento {
         this.idAtendimento = idAtendimento;
     }
 
-    public Funcionario getFuncionario() {
-        return funcionario;
+    public Long getCpfFuncionario() {
+        return cpfFuncionario;
     }
 
-    public void setFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
+    public void setCpfFuncionario(Long cpfFuncionario) {
+        this.cpfFuncionario = cpfFuncionario;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Long getCpfUsuario() {
+        return cpfUsuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setCpfUsuario(Long cpfUsuario) {
+        this.cpfUsuario = cpfUsuario;
     }
 
-    public Chat getChat() {
-        return chat;
+    public Integer getIdChat() {
+        return idChat;
     }
 
-    public void setChat(Chat chat) {
-        this.chat = chat;
+    public void setIdChat(Integer idChat) {
+        this.idChat = idChat;
     }
 
     public LocalDate getDataAtendimento() {
@@ -114,9 +92,9 @@ public class Atendimento {
     public String toString() {
         return "Atendimento{" +
                 "idAtendimento=" + idAtendimento +
-                ", funcionario=" + (funcionario != null ? funcionario.getCpfFuncionario() : "N/A") +
-                ", usuario=" + (usuario != null ? usuario.getCpf() : "N/A") +
-                ", chat=" + (chat != null ? chat.getIdChat() : "N/A") +
+                ", cpfFuncionario=" + cpfFuncionario +
+                ", cpfUsuario=" + cpfUsuario +
+                ", idChat=" + idChat +
                 ", dataAtendimento=" + dataAtendimento +
                 ", categoria='" + categoria + '\'' +
                 '}';

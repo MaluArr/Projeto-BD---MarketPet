@@ -3,11 +3,13 @@ package com.MarketPet.MarketPet.Controller;
 import com.MarketPet.MarketPet.Model.Atendimento;
 import com.MarketPet.MarketPet.Service.AtendimentoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/atendimentos")
@@ -21,53 +23,50 @@ public class AtendimentoController {
         return atendimentoService.listarTodos();
     }
 
-    @GetMapping("/{idAtendimento}")
-    public ResponseEntity<Atendimento> buscarPorId(@PathVariable Integer idAtendimento) {
-        return atendimentoService.buscarPorId(idAtendimento)
+    @GetMapping("/{id}")
+    public ResponseEntity<Atendimento> buscarPorId(@PathVariable Integer id) {
+        return atendimentoService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Atendimento> criarAtendimento(@RequestBody Atendimento atendimento) {
-        Atendimento novoAtendimento = atendimentoService.criarAtendimento(atendimento);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoAtendimento);
+    public Atendimento criarAtendimento(@RequestBody Atendimento atendimento) {
+        return atendimentoService.salvarAtendimento(atendimento);
     }
 
-    @PutMapping("/{idAtendimento}")
-    public ResponseEntity<Atendimento> atualizarAtendimento(
-            @PathVariable Integer idAtendimento,
-            @RequestBody Atendimento atendimento) {
-        atendimento.setIdAtendimento(idAtendimento);
-        Atendimento atendimentoAtualizado = atendimentoService.atualizarAtendimento(atendimento);
-        return ResponseEntity.ok(atendimentoAtualizado);
+    @PutMapping("/{id}")
+    public ResponseEntity<Atendimento> atualizarAtendimento(@PathVariable Integer id, @RequestBody Atendimento atendimento) {
+        if (!atendimentoService.buscarPorId(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        atendimento.setIdAtendimento(id);
+        return ResponseEntity.ok(atendimentoService.salvarAtendimento(atendimento));
     }
 
-    @DeleteMapping("/{idAtendimento}")
-    public ResponseEntity<Void> deletarAtendimento(@PathVariable Integer idAtendimento) {
-        atendimentoService.deletarAtendimento(idAtendimento);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarAtendimento(@PathVariable Integer id) {
+        if (!atendimentoService.buscarPorId(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        atendimentoService.deletarAtendimento(id);
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/funcionario/{cpfFuncionario}")
-    public List<Atendimento> buscarPorFuncionario(@PathVariable Long cpfFuncionario) {
-        return atendimentoService.buscarPorFuncionario(cpfFuncionario);
+    @GetMapping("/relatorio/por-funcionario")
+    public List<Map<String, Object>> relatorioAtendimentosPorFuncionario() {
+        return atendimentoService.gerarRelatorioAtendimentosPorFuncionario();
     }
 
-    @GetMapping("/usuario/{cpfUsuario}")
-    public List<Atendimento> buscarPorUsuario(@PathVariable Long cpfUsuario) {
-        return atendimentoService.buscarPorUsuario(cpfUsuario);
+    @GetMapping("/relatorio/por-categoria")
+    public List<Map<String, Object>> relatorioAtendimentosPorCategoria() {
+        return atendimentoService.gerarRelatorioAtendimentosPorCategoria();
     }
 
-    @GetMapping("/categoria/{categoria}")
-    public List<Atendimento> buscarPorCategoria(@PathVariable String categoria) {
-        return atendimentoService.buscarPorCategoria(categoria);
-    }
-
-    @GetMapping("/chat/{idChat}")
-    public ResponseEntity<Atendimento> buscarPorChat(@PathVariable Integer idChat) {
-        return atendimentoService.buscarPorChat(idChat)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/relatorio/por-periodo")
+    public List<Map<String, Object>> relatorioAtendimentosPorPeriodo(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim) {
+        return atendimentoService.gerarRelatorioAtendimentosPorPeriodo(dataInicio, dataFim);
     }
 }
