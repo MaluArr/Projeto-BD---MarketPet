@@ -42,7 +42,7 @@ public class AdicionarProdutoCarrinho {
     // Verifica se o produto pertence ao comprador do carrinho
     public boolean isRelacaoCorreta() {
         return isCompradorValido() && isCarrinhoValido() &&
-                carrinho.getComprador().getCpf().equals(comprador.getCpf());
+                carrinho.getCpfComprador().equals(comprador.getCpf());
     }
 
     // Getters e Setters
