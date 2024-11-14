@@ -1,4 +1,3 @@
-// src/components/CompradorForm.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import CompradorService from '../services/CompradorService';

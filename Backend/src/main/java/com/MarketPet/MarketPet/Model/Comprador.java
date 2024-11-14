@@ -2,6 +2,7 @@ package com.MarketPet.MarketPet.Model;
 
 import java.util.Objects;
 
+
 public class Comprador {
     private Long cpf;
     private Integer idEndereco;

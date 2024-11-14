@@ -1,23 +1,31 @@
-/* src/styles/EntityList.css */
 .comprador {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-}
-
-.comprador h1 {
-    color: #333;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     text-align: center;
 }
 
-.add-button {
+.comprador h1, .comprador h2 {
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.add-button, .action-button {
     display: inline-block;
     margin-bottom: 20px;
-    padding: 10px 15px;
+    padding: 10px 20px;
     background-color: #4CAF50;
     color: white;
     text-decoration: none;
-    border-radius: 4px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.add-button:hover, .action-button:hover {
+    background-color: #45a049;
 }
 
 table {
@@ -42,36 +50,21 @@ th {
     border: none;
     border-radius: 3px;
     cursor: pointer;
+    color: white;
 }
 
 .edit-button {
     background-color: #2196F3;
-    color: white;
     text-decoration: none;
 }
 
 .delete-button {
     background-color: #f44336;
-    color: white;
 }
 
 .error-message {
     color: red;
     margin-bottom: 10px;
-}
-
-.comprador {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.comprtador h2 {
-    color: #333;
-    text-align: center;
 }
 
 .comprador form {
@@ -98,42 +91,4 @@ th {
 
 .comprador button[type="button"] {
     background-color: #f44336;
-}
-
-.error-message {
-    color: red;
-    margin-bottom: 10px;
-}
-
-.comprador {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
-}
-
-.comprador h1 {
-    color: #333;
-    margin-bottom: 30px;
-}
-
-.action-buttons {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.action-button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.action-button:hover {
-    background-color: #45a049;
 }
