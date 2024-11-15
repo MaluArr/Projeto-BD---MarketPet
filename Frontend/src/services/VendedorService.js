@@ -1,84 +1,54 @@
-// src/services/VendedorService.js
 import axios from 'axios';
 
-const API_URL = '/api/vendedores';
-
-class VendedorService {
-    // Buscar todos os vendedores
-    static async getAllVendedores() {
+const VendedorService = {
+    fetchVendedores: async () => {
         try {
-            const response = await axios.get(API_URL);
+            const response = await axios.get('/api/vendedores');
             return response.data;
         } catch (error) {
             console.error('Erro ao buscar vendedores:', error);
-            throw error;
+            throw new Error('Erro ao buscar vendedores');
         }
-    }
+    },
 
-    // Buscar um vendedor específico por CPF
-    static async getVendedorByCpf(cpf) {
+    getVendedorByCpf: async (cpf) => {
         try {
-            const response = await axios.get(`${API_URL}/${cpf}`);
+            const response = await axios.get(`/api/vendedores/${cpf}`);
             return response.data;
         } catch (error) {
-            console.error(`Erro ao buscar vendedor com CPF ${cpf}:`, error);
-            throw error;
+            console.error('Erro ao buscar vendedor:', error);
+            throw new Error('Erro ao buscar vendedor');
         }
-    }
+    },
 
-    // Criar um novo vendedor
-    static async createVendedor(vendedorData) {
+    createVendedor: async (vendedorData) => {
         try {
-            const response = await axios.post(API_URL, vendedorData);
+            const response = await axios.post('/api/vendedores', vendedorData);
             return response.data;
         } catch (error) {
             console.error('Erro ao criar vendedor:', error);
-            throw error;
+            throw new Error('Erro ao criar vendedor');
         }
-    }
+    },
 
-    // Atualizar um vendedor existente
-    static async updateVendedor(cpf, vendedorData) {
+    updateVendedor: async (cpf, vendedorData) => {
         try {
-            const response = await axios.put(`${API_URL}/${cpf}`, vendedorData);
+            const response = await axios.put(`/api/vendedores/${cpf}`, vendedorData);
             return response.data;
         } catch (error) {
-            console.error(`Erro ao atualizar vendedor com CPF ${cpf}:`, error);
-            throw error;
+            console.error('Erro ao atualizar vendedor:', error);
+            throw new Error('Erro ao atualizar vendedor');
         }
-    }
+    },
 
-    // Excluir um vendedor
-    static async deleteVendedor(cpf) {
+    deleteVendedor: async (cpf) => {
         try {
-            await axios.delete(`${API_URL}/${cpf}`);
+            await axios.delete(`/api/vendedores/${cpf}`);
         } catch (error) {
-            console.error(`Erro ao excluir vendedor com CPF ${cpf}:`, error);
-            throw error;
+            console.error('Erro ao deletar vendedor:', error);
+            throw new Error('Erro ao deletar vendedor');
         }
     }
-
-    // Buscar vendedores por avaliação superior
-    static async getVendedoresByAvaliacaoSuperior(nota) {
-        try {
-            const response = await axios.get(`${API_URL}/avaliacao-superior/${nota}`);
-            return response.data;
-        } catch (error) {
-            console.error('Erro ao buscar vendedores por avaliação superior:', error);
-            throw error;
-        }
-    }
-
-    // Buscar vendedores por total de vendas superior
-    static async getVendedoresByTotalVendasSuperior(valor) {
-        try {
-            const response = await axios.get(`${API_URL}/vendas-superior/${valor}`);
-            return response.data;
-        } catch (error) {
-            console.error('Erro ao buscar vendedores por total de vendas superior:', error);
-            throw error;
-        }
-    }
-}
+};
 
 export default VendedorService;

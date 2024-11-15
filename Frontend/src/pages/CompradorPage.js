@@ -14,9 +14,6 @@ const CompradorPage = () => {
                 <Link to="/compradores/new" className="action-button">
                     Adicionar Novo Comprador
                 </Link>
-                <Link to="/compradores/relatorios" className="action-button">
-                    Gerar Relatórios
-                </Link>
             </div>
         </div>
     );

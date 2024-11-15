@@ -1,43 +1,39 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import EnderecoService from '../services/EnderecoService';
 import '../styles/Endereco.css';
-import EnderecoForm from '../components/EnderecoForm';
 
 const EnderecoList = () => {
     const [enderecos, setEnderecos] = useState([]);
-    const [selectedEndereco, setSelectedEndereco] = useState(null);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         fetchEnderecos();
     }, []);
 
-    const fetchEnderecos = () => {
-        EnderecoService.getEnderecos()
-            .then(response => {
-                setEnderecos(response.data);
-            })
-            .catch(error => {
-                console.error('Erro ao buscar endereços:', error);
-            });
+    const fetchEnderecos = async () => {
+        try {
+            const response = await EnderecoService.getEnderecos();
+            setEnderecos(response.data);
+        } catch (error) {
+            setError('Falha ao carregar endereços');
+        }
     };
 
-    const handleDelete = (id) => {
-        EnderecoService.deleteEndereco(id)
-            .then(() => {
-                fetchEnderecos();
-            })
-            .catch(error => {
-                console.error('Erro ao deletar endereço:', error);
-            });
-    };
-
-    const handleEdit = (endereco) => {
-        setSelectedEndereco(endereco);
+    const handleDelete = async (idEndereco) => {
+        try {
+            await EnderecoService.deleteEndereco(idEndereco);
+            setEnderecos(enderecos.filter(endereco => endereco.idEndereco !== idEndereco));
+        } catch (error) {
+            setError('Falha ao deletar endereço');
+        }
     };
 
     return (
-        <div className="endereco-list">
-            <h2>Lista de Endereços</h2>
+        <div className="entity-list">
+            <h1>Lista de Endereços</h1>
+            {error && <p className="error-message">{error}</p>}
+            <Link to="/enderecos/new" className="add-button">Adicionar Novo Endereço</Link>
             <table>
                 <thead>
                 <tr>
@@ -58,14 +54,13 @@ const EnderecoList = () => {
                         <td>{endereco.cidade}</td>
                         <td>{endereco.estado}</td>
                         <td>
-                            <button onClick={() => handleEdit(endereco)}>Editar</button>
-                            <button onClick={() => handleDelete(endereco.idEndereco)}>Excluir</button>
+                            <Link to={`/enderecos/${endereco.idEndereco}/edit`} className="edit-button">Editar</Link>
+                            <button onClick={() => handleDelete(endereco.idEndereco)} className="delete-button">Excluir</button>
                         </td>
                     </tr>
                 ))}
                 </tbody>
             </table>
-            {selectedEndereco && <EnderecoForm endereco={selectedEndereco} onSave={fetchEnderecos} />}
         </div>
     );
 };

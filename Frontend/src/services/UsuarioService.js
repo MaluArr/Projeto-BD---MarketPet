@@ -1,4 +1,3 @@
-// src/services/UsuarioService.js
 import axios from 'axios';
 
 const UsuarioService = {
@@ -17,28 +16,28 @@ const UsuarioService = {
             const response = await axios.get(`/api/usuarios/${cpf}`);
             return response.data;
         } catch (error) {
-            console.error('Erro ao buscar usuário por CPF:', error);
-            throw new Error('Erro ao buscar usuário por CPF');
+            console.error('Erro ao buscar usuário:', error);
+            throw new Error('Erro ao buscar usuário');
         }
     },
 
-    updateUsuario: async (cpf, userData) => {
+    createUsuario: async (usuarioData) => {
         try {
-            const response = await axios.put(`/api/usuarios/${cpf}`, userData);
-            return response.data;
-        } catch (error) {
-            console.error('Erro ao atualizar usuário:', error);
-            throw new Error('Erro ao atualizar usuário');
-        }
-    },
-
-    createUsuario: async (userData) => {
-        try {
-            const response = await axios.post('/api/usuarios', userData);
+            const response = await axios.post('/api/usuarios', usuarioData);
             return response.data;
         } catch (error) {
             console.error('Erro ao criar usuário:', error);
             throw new Error('Erro ao criar usuário');
+        }
+    },
+
+    updateUsuario: async (cpf, usuarioData) => {
+        try {
+            const response = await axios.put(`/api/usuarios/${cpf}`, usuarioData);
+            return response.data;
+        } catch (error) {
+            console.error('Erro ao atualizar usuário:', error);
+            throw new Error('Erro ao atualizar usuário');
         }
     },
 

@@ -4,12 +4,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import UsuarioPage from './pages/UsuarioPage';
 import UsuarioList from './components/UsuarioList';
-import UsuarioDetails from './components/UsuarioDetails';
 import UsuarioForm from './components/UsuarioForm';
 import VendedorList from './components/VendedorList';
 import VendedorForm from './components/VendedorForm';
-import VendedorDetails from './components/VendedorDetails';
-import VendedorReports from './components/VendedorReports';
 import EnderecoPage from './pages/EnderecoPage';
 import EnderecoList from './components/EnderecoList';
 import EnderecoForm from './components/EnderecoForm';
@@ -30,16 +27,13 @@ function App() {
                     {/* Rotas de Usuário */}
                     <Route path="/usuarios" element={<UsuarioPage />} />
                     <Route path="/usuarios" element={<UsuarioList />} />
-                    <Route path="/usuarios/:cpf" element={<UsuarioDetails />} />
                     <Route path="/usuarios/new" element={<UsuarioForm />} />
                     <Route path="/usuarios/:cpf/edit" element={<UsuarioForm />} />
 
                     {/* Rotas de Vendedor */}
                     <Route path="/vendedores" element={<VendedorList />} />
                     <Route path="/vendedores/new" element={<VendedorForm />} />
-                    <Route path="/vendedores/:cpf" element={<VendedorDetails />} />
                     <Route path="/vendedores/:cpf/edit" element={<VendedorForm />} />
-                    <Route path="/vendedores/relatorios" element={<VendedorReports />} />
 
                     {/* Rotas de Endereço */}
                     <Route path="/enderecos" element={<EnderecoPage />} />

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import VendedorService from '../services/VendedorService';
 import '../styles/Vendedor.css';
 
 const VendedorForm = () => {
-    const [vendedor, setVendedor] = useState({
+    const [formData, setFormData] = useState({
         cpf: '',
         descricao: '',
         fotoPerfil: '',
@@ -12,96 +12,104 @@ const VendedorForm = () => {
         avaliacaoMedia: '',
         dataInicioVendas: ''
     });
+    const [error, setError] = useState('');
     const navigate = useNavigate();
     const { cpf } = useParams();
 
     useEffect(() => {
         if (cpf) {
-            const fetchVendedor = async () => {
-                const response = await axios.get(`/api/vendedores/${cpf}`);
-                setVendedor(response.data);
-            };
-            fetchVendedor();
+            fetchVendedor(cpf);
         }
     }, [cpf]);
 
+    const fetchVendedor = async (cpf) => {
+        try {
+            const data = await VendedorService.getVendedorByCpf(cpf);
+            setFormData(data);
+        } catch (error) {
+            setError('Falha ao carregar dados do vendedor');
+        }
+    };
+
     const handleChange = (e) => {
-        setVendedor({ ...vendedor, [e.target.name]: e.target.value });
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (cpf) {
-            await axios.put(`/api/vendedores/${cpf}`, vendedor);
-        } else {
-            await axios.post('/api/vendedores', vendedor);
+        setError('');
+        try {
+            if (cpf) {
+                await VendedorService.updateVendedor(cpf, formData);
+            } else {
+                await VendedorService.createVendedor(formData);
+            }
+            navigate('/vendedores');
+        } catch (error) {
+            setError('Falha ao salvar vendedor');
         }
-        navigate('/vendedores');
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>{cpf ? 'Editar' : 'Criar'} Vendedor</h2>
-            <div>
-                <label>CPF:</label>
+        <div className="entity-form">
+            <h2>{cpf ? 'Editar Vendedor' : 'Novo Vendedor'}</h2>
+            {error && <p className="error-message">{error}</p>}
+            <form onSubmit={handleSubmit}>
                 <input
                     type="text"
                     name="cpf"
-                    value={vendedor.cpf}
+                    value={formData.cpf}
                     onChange={handleChange}
+                    placeholder="CPF"
                     required
+                    readOnly={!!cpf}
                 />
-            </div>
-            <div>
-                <label>Descrição:</label>
                 <input
                     type="text"
                     name="descricao"
-                    value={vendedor.descricao}
+                    value={formData.descricao}
                     onChange={handleChange}
+                    placeholder="Descrição"
+                    required
                 />
-            </div>
-            <div>
-                <label>Foto de Perfil:</label>
                 <input
                     type="text"
                     name="fotoPerfil"
-                    value={vendedor.fotoPerfil}
+                    value={formData.fotoPerfil}
                     onChange={handleChange}
+                    placeholder="URL da Foto de Perfil"
                 />
-            </div>
-            <div>
-                <label>Total de Vendas:</label>
                 <input
                     type="number"
                     name="totalVendas"
-                    value={vendedor.totalVendas}
+                    value={formData.totalVendas}
                     onChange={handleChange}
+                    placeholder="Total de Vendas"
                     required
+                    step="0.01"
                 />
-            </div>
-            <div>
-                <label>Avaliação Média:</label>
                 <input
                     type="number"
                     name="avaliacaoMedia"
-                    value={vendedor.avaliacaoMedia}
+                    value={formData.avaliacaoMedia}
                     onChange={handleChange}
+                    placeholder="Avaliação Média"
                     required
+                    step="0.1"
+                    min="0"
+                    max="5"
                 />
-            </div>
-            <div>
-                <label>Data de Início das Vendas:</label>
                 <input
                     type="date"
                     name="dataInicioVendas"
-                    value={vendedor.dataInicioVendas}
+                    value={formData.dataInicioVendas}
                     onChange={handleChange}
                     required
                 />
-            </div>
-            <button type="submit">Salvar</button>
-        </form>
+                <button type="submit">{cpf ? 'Atualizar' : 'Criar'}</button>
+                <button type="button" onClick={() => navigate('/vendedores')}>Cancelar</button>
+            </form>
+        </div>
     );
 };
 

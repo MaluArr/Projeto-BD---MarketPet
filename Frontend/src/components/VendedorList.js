@@ -1,48 +1,61 @@
-// src/components/VendedorList.js
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
+import VendedorService from '../services/VendedorService';
 import '../styles/Vendedor.css';
 
 const VendedorList = () => {
     const [vendedores, setVendedores] = useState([]);
+    const [error, setError] = useState('');
 
     useEffect(() => {
-        const fetchVendedores = async () => {
-            try {
-                const response = await axios.get('/api/vendedores');
-                setVendedores(response.data);
-            } catch (error) {
-                console.error('Erro ao buscar vendedores:', error);
-            }
-        };
         fetchVendedores();
     }, []);
 
+    const fetchVendedores = async () => {
+        try {
+            const data = await VendedorService.fetchVendedores();
+            setVendedores(data);
+        } catch (error) {
+            setError('Falha ao carregar vendedores');
+        }
+    };
+
+    const handleDelete = async (cpf) => {
+        try {
+            await VendedorService.deleteVendedor(cpf);
+            setVendedores(vendedores.filter(vendedor => vendedor.cpf !== cpf));
+        } catch (error) {
+            setError('Falha ao deletar vendedor');
+        }
+    };
+
     return (
-        <div className="vendedor-list">
-            <h2>Lista de Vendedores</h2>
-            <Link to="/vendedores/new" className="button">Novo Vendedor</Link>
+        <div className="entity-list">
+            <h1>Lista de Vendedores</h1>
+            {error && <p className="error-message">{error}</p>}
+            <Link to="/vendedores/new" className="add-button">Adicionar Novo Vendedor</Link>
             <table>
                 <thead>
                 <tr>
                     <th>CPF</th>
                     <th>Descrição</th>
-                    <th>Total Vendas</th>
+                    <th>Total de Vendas</th>
                     <th>Avaliação Média</th>
+                    <th>Data de Início</th>
                     <th>Ações</th>
                 </tr>
                 </thead>
                 <tbody>
-                {vendedores.map((vendedor) => (
+                {vendedores.map(vendedor => (
                     <tr key={vendedor.cpf}>
-                        <td data-label="CPF">{vendedor.cpf}</td>
-                        <td data-label="Descrição">{vendedor.descricao}</td>
-                        <td data-label="Total Vendas">{vendedor.totalVendas}</td>
-                        <td data-label="Avaliação Média">{vendedor.avaliacaoMedia}</td>
-                        <td data-label="Ações">
-                            <Link to={`/vendedores/${vendedor.cpf}`}>Detalhes</Link>
-                            <Link to={`/vendedores/${vendedor.cpf}/edit`}>Editar</Link>
+                        <td>{vendedor.cpf}</td>
+                        <td>{vendedor.descricao}</td>
+                        <td>{vendedor.totalVendas}</td>
+                        <td>{vendedor.avaliacaoMedia}</td>
+                        <td>{new Date(vendedor.dataInicioVendas).toLocaleDateString()}</td>
+                        <td>
+                            <Link to={`/vendedores/${vendedor.cpf}/edit`} className="edit-button">Editar</Link>
+                            <button onClick={() => handleDelete(vendedor.cpf)} className="delete-button">Excluir</button>
                         </td>
                     </tr>
                 ))}
