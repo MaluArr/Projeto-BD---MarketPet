@@ -10,7 +10,7 @@ public class JDBC_Connection {
 
     private static final String URL = "jdbc:mysql://localhost:3306/MarketPet";
     private static final String USER = "root";
-    private static final String PASSWORD = "1234";
+    private static final String PASSWORD = "12345mjfr";
     private static final String DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
     private static final Logger logger = LoggerFactory.getLogger(JDBC_Connection.class);
 

@@ -24,11 +24,11 @@ public class DatabaseConfig implements WebMvcConfigurer {
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 
         // URL de conexão com o banco de dados
-        dataSource.setUrl("jdbc:mysql://localhost:3306/MarketPet");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/MarketPet?useSSL=false&serverTimezone=UTC");
 
         // Credenciais de acesso ao banco de dados
         dataSource.setUsername("root");
-        dataSource.setPassword("1234");
+        dataSource.setPassword("12345mjfr");
 
         return dataSource;
     }

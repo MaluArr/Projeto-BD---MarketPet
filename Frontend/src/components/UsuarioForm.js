@@ -9,6 +9,7 @@ const UsuarioForm = () => {
         nomeReal: '',
         email: '',
         telefone1: '',
+        telefone2: '',
         senha: '',
         nomeUsuario: '',
     });
@@ -86,6 +87,14 @@ const UsuarioForm = () => {
                     value={formData.telefone1}
                     onChange={handleChange}
                     placeholder="Telefone"
+                    required
+                />
+                <input
+                    type="tel"
+                    name="telefone2"
+                    value={formData.telefone2}
+                    onChange={handleChange}
+                    placeholder="Telefone2"
                     required
                 />
                 <input

@@ -3,7 +3,7 @@ import axios from 'axios';
 const UsuarioService = {
     fetchUsuarios: async () => {
         try {
-            const response = await axios.get('/api/usuarios');
+            const response = await axios.get('http://localhost:8080/api/usuarios');
             return response.data;
         } catch (error) {
             console.error('Erro ao buscar usuários:', error);
@@ -22,8 +22,9 @@ const UsuarioService = {
     },
 
     createUsuario: async (usuarioData) => {
+        console.log('Dados enviados para a API:', usuarioData);
         try {
-            const response = await axios.post('/api/usuarios', usuarioData);
+            const response = await axios.post('http://localhost:8080/api/usuarios', usuarioData);
             return response.data;
         } catch (error) {
             console.error('Erro ao criar usuário:', error);
