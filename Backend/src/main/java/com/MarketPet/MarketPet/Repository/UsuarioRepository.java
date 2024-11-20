@@ -76,16 +76,16 @@ public class UsuarioRepository {
             ps.setString(3, usuario.getNomeUsuario());
             ps.setString(4, usuario.getEmail());
             ps.setString(5, usuario.getSenha());
-            ps.setInt(6, usuario.getTelefone1());
-            ps.setInt(7, usuario.getTelefone2());
+            ps.setLong(6, usuario.getTelefone1());
+            ps.setLong(7, usuario.getTelefone2());
 
             // Valores para UPDATE
             ps.setString(8, usuario.getNomeReal());
             ps.setString(9, usuario.getNomeUsuario());
             ps.setString(10, usuario.getEmail());
             ps.setString(11, usuario.getSenha());
-            ps.setInt(12, usuario.getTelefone1());
-            ps.setInt(13, usuario.getTelefone2());
+            ps.setLong(12, usuario.getTelefone1());
+            ps.setLong(13, usuario.getTelefone2());
 
             ps.executeUpdate();
             logger.info("Usuário salvo com sucesso: {}", usuario.getCpf());
@@ -162,8 +162,8 @@ public class UsuarioRepository {
         usuario.setNomeUsuario(rs.getString("nome_usuario"));
         usuario.setEmail(rs.getString("email"));
         usuario.setSenha(rs.getString("senha"));
-        usuario.setTelefone1(rs.getInt("telefone1"));
-        usuario.setTelefone2(rs.getInt("telefone2"));
+        usuario.setTelefone1(rs.getLong("telefone1"));
+        usuario.setTelefone2(rs.getLong("telefone2"));
         return usuario;
     }
 }

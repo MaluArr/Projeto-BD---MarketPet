@@ -25,7 +25,7 @@ const UsuarioPage = () => {
             <div className="action-buttons">
                 <button onClick={fetchUsuarios}>Listar Usuários</button>
                 <button onClick={() => window.location.href = '/usuarios/list'} className="action-button">
-                    Adicionar Novo Usuário
+                    Gerenciamento Usuário
                 </button>
             </div>
 

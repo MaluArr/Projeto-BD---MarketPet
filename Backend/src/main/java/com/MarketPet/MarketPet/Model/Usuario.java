@@ -8,13 +8,13 @@ public class Usuario {
     private String nomeUsuario;
     private String email;
     private String senha;
-    private Integer telefone1;
-    private Integer telefone2;
+    private Long telefone1;
+    private Long telefone2;
 
     // Construtores
     public Usuario() {}
 
-    public Usuario(Long cpf, String nomeReal, String nomeUsuario, String email, String senha, Integer telefone1, Integer telefone2) {
+    public Usuario(Long cpf, String nomeReal, String nomeUsuario, String email, String senha, Long telefone1, Long telefone2) {
         this.cpf = cpf;
         this.nomeReal = nomeReal;
         this.nomeUsuario = nomeUsuario;
@@ -65,19 +65,19 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public Integer getTelefone1() {
+    public Long getTelefone1() {
         return telefone1;
     }
 
-    public void setTelefone1(Integer telefone1) {
+    public void setTelefone1(Long telefone1) {
         this.telefone1 = telefone1;
     }
 
-    public Integer getTelefone2() {
+    public Long getTelefone2() {
         return telefone2;
     }
 
-    public void setTelefone2(Integer telefone2) {
+    public void setTelefone2(Long telefone2) {
         this.telefone2 = telefone2;
     }
 

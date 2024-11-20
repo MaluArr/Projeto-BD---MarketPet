@@ -28,6 +28,7 @@ const UsuarioForm = () => {
             const data = await UsuarioService.getUsuarioByCpf(cpf);
             setFormData(data);
         } catch (error) {
+            console.log(error)
             setError('Falha ao carregar dados do usuário');
         }
     };
@@ -39,11 +40,23 @@ const UsuarioForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        const preparedData = {
+            ...formData,
+            cpf: parseInt(formData.cpf, 10) || '',           // Convertendo para número ou mantendo como string vazia
+            telefone1: parseInt(formData.telefone1, 10) || '', // Convertendo para número ou mantendo como string vazia
+            telefone2: parseInt(formData.telefone2, 10) || '', // Convertendo para número ou mantendo como string vazia
+            nomeReal: formData.nomeReal.trim(),              // Garantindo que seja uma string sem espaços desnecessários
+            email: formData.email.trim(),                    // Garantindo que seja uma string sem espaços desnecessários
+            senha: formData.senha.trim(),                    // Garantindo que seja uma string sem espaços desnecessários
+            nomeUsuario: formData.nomeUsuario.trim()         // Garantindo que seja uma string sem espaços desnecessários
+        };
+        console.log(preparedData)
+
         try {
             if (cpf) {
-                await UsuarioService.updateUsuario(cpf, formData);
+                await UsuarioService.updateUsuario(cpf, preparedData);
             } else {
-                await UsuarioService.createUsuario(formData);
+                await UsuarioService.createUsuario(preparedData);
             }
             navigate('/usuarios');
         } catch (error) {

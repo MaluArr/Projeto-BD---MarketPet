@@ -44,7 +44,7 @@ const UsuarioService = {
 
     deleteUsuario: async (cpf) => {
         try {
-            await axios.delete(`/api/usuarios/${cpf}`);
+            await axios.delete(`http://localhost:8080/api/usuarios/${cpf}`);
         } catch (error) {
             console.error('Erro ao deletar usuário:', error);
             throw new Error('Erro ao deletar usuário');

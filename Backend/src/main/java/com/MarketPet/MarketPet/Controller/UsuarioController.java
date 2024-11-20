@@ -29,9 +29,15 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
-        Usuario novoUsuario = usuarioService.criarUsuario(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoUsuario);
+    public ResponseEntity<?> criarUsuario(@RequestBody Usuario usuario) {
+        try {
+            Usuario novoUsuario = usuarioService.criarUsuario(usuario);
+            return ResponseEntity.status(HttpStatus.CREATED).body(novoUsuario);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar usuário.");
+        }
     }
 
     @PutMapping("/{cpf}")
