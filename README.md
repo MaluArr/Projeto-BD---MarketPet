@@ -44,6 +44,7 @@ Use o seguinte comando para iniciar a aplicação:
 
       mvn spring-boot:run
       cd Frontend
+      npm install
       npm start
 
 ## Configuração
