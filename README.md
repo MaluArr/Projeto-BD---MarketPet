@@ -6,11 +6,16 @@
   O projeto está organizado de forma modular, seguindo as práticas de desenvolvimento com Java e Spring Boot:
 
 src/main/java/com/MarketPet/MarketPet/
-├── config/                     # Configurações do banco de dados e web
-├── controller/                 # Controladores REST para endpoints
-├── model/                      # Modelos de dados representando entidades
-├── repository/                 # Repositórios para acesso aos dados
-└── service/                    # Serviços para lógica de negócios
+
+├── config/                     # Para as configurações do banco de dados e web
+
+├── controller/                 # Os controladores REST para endpoints
+
+├── model/                      # Os modelos de dados representando entidades presente no banco de dados
+
+├── repository/                 # Os repositórios para acesso aos dados
+
+└── service/                    # Os serviços para lógica de negócios
 
 ## Tecnologias Utilizadas
 - Java 11
