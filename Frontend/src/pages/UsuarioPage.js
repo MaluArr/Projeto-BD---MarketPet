@@ -1,23 +1,47 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import '../styles/Usuario.css';
 import axios from 'axios';
 
 const UsuarioPage = () => {
     const [usuarios, setUsuarios] = useState([]); // Estado para armazenar os usuários
     const [error, setError] = useState(null); // Estado para erros
+    const [filter, setFilter] = useState(''); // Estado para o campo de busca
+    const [showSearchBar, setShowSearchBar] = useState(false); // Controla se a barra de busca deve ser exibida
 
     const fetchUsuarios = () => {
         axios.get('http://localhost:8080/api/usuarios')
             .then(response => {
                 setUsuarios(response.data); // Atualiza o estado com os usuários
                 setError(null); // Limpa qualquer erro anterior
+                setShowSearchBar(true); // Exibe a barra de busca
             })
             .catch(err => {
                 setError('Erro ao buscar usuários');
                 console.error('Erro ao buscar usuários:', err);
             });
     };
+
+    const handleFilterChange = (e) => {
+        setFilter(e.target.value); // Atualiza o estado do filtro com o valor digitado
+    };
+
+    // Filtra os usuários com base no filtro (nome, email, telefone ou usuário)
+    const filteredUsuarios = usuarios.filter((usuario) => {
+        const nomeReal = usuario.nomeReal || ''; // Garante que o valor seja uma string
+        const email = usuario.email || ''; // Garante que o valor seja uma string
+        const telefone1 = usuario.telefone1 ? usuario.telefone1.toString() : ''; // Converte para string se necessário
+        const telefone2 = usuario.telefone2 ? usuario.telefone2.toString() : ''; // Converte para string se necessário
+        const nomeUsuario = usuario.nomeUsuario || ''; // Garante que o valor seja uma string
+
+        // Verifica se o filtro está presente em algum dos campos
+        return (
+            nomeReal.toLowerCase().includes(filter.toLowerCase()) ||
+            email.toLowerCase().includes(filter.toLowerCase()) ||
+            telefone1.includes(filter) ||
+            telefone2.includes(filter) ||
+            nomeUsuario.toLowerCase().includes(filter.toLowerCase())
+        );
+    });
 
     return (
         <div className="entity-page">
@@ -31,8 +55,21 @@ const UsuarioPage = () => {
 
             {error && <p className="error-message">{error}</p>}
 
+            {/* Barra de Pesquisa - só aparece após clicar em Listar Usuários */}
+            {showSearchBar && (
+                <div className="search-container">
+                    <input
+                        type="text"
+                        placeholder="Buscar por nome, email, telefone ou usuário..."
+                        value={filter}
+                        onChange={handleFilterChange}
+                        className="search-input"
+                    />
+                </div>
+            )}
+
             <div className="usuario-list">
-                {usuarios.length > 0 && (
+                {filteredUsuarios.length > 0 ? (
                     <table className="usuario-table">
                         <thead>
                         <tr>
@@ -45,7 +82,7 @@ const UsuarioPage = () => {
                         </tr>
                         </thead>
                         <tbody>
-                        {usuarios.map(usuario => (
+                        {filteredUsuarios.map(usuario => (
                             <tr key={usuario.id}>
                                 <td>{usuario.id}</td>
                                 <td>{usuario.nomeReal}</td>
@@ -57,6 +94,8 @@ const UsuarioPage = () => {
                         ))}
                         </tbody>
                     </table>
+                ) : (
+                    showSearchBar && <p>Nenhum usuário encontrado.</p>
                 )}
             </div>
         </div>

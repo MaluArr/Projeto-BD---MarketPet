@@ -1,4 +1,3 @@
-// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
@@ -56,13 +55,18 @@ import VendaForm from './components/VendaForm';
 import AvaliacaoPage from './pages/AvaliacaoPage';
 import AvaliacaoList from './components/AvaliacaoList';
 import AvaliacaoForm from './components/AvaliacaoForm';
+import DashboardPage from "./pages/DashboardPage";
+
+
+
 
 function App() {
     return (
         <Router>
             <div className="App">
                 <Routes>
-                    <Route path="/" element={<HomePage />} />
+                    <Route path="/" element={<DashboardPage />} />
+
 
                     {/* Rotas de Usuário */}
                     <Route path="/usuarios" element={<UsuarioPage />} />
@@ -70,11 +74,13 @@ function App() {
                     <Route path="/usuarios/new" element={<UsuarioForm />} />
                     <Route path="/usuarios/:cpf/edit" element={<UsuarioForm />} />
 
+
                     {/* Rotas de Vendedor */}
                     <Route path="/vendedores" element={<VendedorPage />} />
                     <Route path="/vendedores/list" element={<VendedorList />} />
                     <Route path="/vendedores/new" element={<VendedorForm />} />
                     <Route path="/vendedores/:cpf/edit" element={<VendedorForm />} />
+
 
                     {/* Rotas de Endereço */}
                     <Route path="/enderecos" element={<EnderecoPage />} />
@@ -82,11 +88,13 @@ function App() {
                     <Route path="/enderecos/new" element={<EnderecoForm />} />
                     <Route path="/enderecos/:id/edit" element={<EnderecoForm />} />
 
+
                     {/* Rotas de Cartão */}
                     <Route path="/cartoes" element={<CartaoPage />} />
                     <Route path="/cartoes/list" element={<CartaoList />} />
                     <Route path="/cartoes/new" element={<CartaoForm />} />
                     <Route path="/cartoes/:id/edit" element={<CartaoForm />} />
+
 
                     {/* Rotas de Comprador */}
                     <Route path="/compradores" element={<CompradorPage />} />
@@ -94,11 +102,13 @@ function App() {
                     <Route path="/compradores/new" element={<CompradorForm />} />
                     <Route path="/compradores/:cpf/edit" element={<CompradorForm />} />
 
+
                     {/* Rotas de Chat */}
                     <Route path="/chats" element={<ChatPage />} />
                     <Route path="/chats/list" element={<ChatList />} />
                     <Route path="/chats/new" element={<ChatForm />} />
                     <Route path="/chats/:idChat/edit" element={<ChatForm />} />
+
 
                     {/* Rotas de Produto */}
                     <Route path="/produtos" element={<ProdutoPage />} />
@@ -106,11 +116,13 @@ function App() {
                     <Route path="/produtos/new" element={<ProdutoForm />} />
                     <Route path="/produtos/:codigoProduto/edit" element={<ProdutoForm />} />
 
+
                     {/* Rotas de Funcionário */}
                     <Route path="/funcionarios" element={<FuncionarioPage />} />
                     <Route path="/funcionarios/list" element={<FuncionarioList />} />
                     <Route path="/funcionarios/new" element={<FuncionarioForm />} />
                     <Route path="/funcionarios/:cpfFuncionario/edit" element={<FuncionarioForm />} />
+
 
                     {/* Rotas de Curador */}
                     <Route path="/curadores" element={<CuradorPage />} />
@@ -118,11 +130,13 @@ function App() {
                     <Route path="/curadores/new" element={<CuradorForm />} />
                     <Route path="/curadores/:idCurador/edit" element={<CuradorForm />} />
 
+
                     {/* Rotas de Curadoria */}
                     <Route path="/curadorias" element={<CuradoriaPage />} />
                     <Route path="/curadorias/list" element={<CuradoriaList />} />
                     <Route path="/curadorias/new" element={<CuradoriaForm />} />
                     <Route path="/curadorias/:codigoCuradoria/edit" element={<CuradoriaForm />} />
+
 
                     {/* Rotas de Atendente */}
                     <Route path="/atendentes" element={<AtendentePage />} />
@@ -130,11 +144,13 @@ function App() {
                     <Route path="/atendentes/new" element={<AtendenteForm />} />
                     <Route path="/atendentes/:idAtendente/edit" element={<AtendenteForm />} />
 
+
                     {/* Rotas de Atendimento */}
                     <Route path="/atendimentos" element={<AtendimentoPage />} />
                     <Route path="/atendimentos/list" element={<AtendimentoList />} />
                     <Route path="/atendimentos/new" element={<AtendimentoForm />} />
                     <Route path="/atendimentos/:idAtendimento/edit" element={<AtendimentoForm />} />
+
 
                     {/* Rotas de BuscarProduto */}
                     <Route path="/buscar-produto" element={<BuscarProdutoPage />} />
@@ -142,11 +158,13 @@ function App() {
                     <Route path="/buscar-produto/new" element={<BuscarProdutoForm />} />
                     <Route path="/buscar-produto/:idBusca/edit" element={<BuscarProdutoForm />} />
 
+
                     {/* Rotas de FavoritarProduto */}
                     <Route path="/favoritar-produtos" element={<FavoritarProdutoPage />} />
                     <Route path="/favoritar-produtos/list" element={<FavoritarProdutoList />} />
                     <Route path="/favoritar-produtos/new" element={<FavoritarProdutoForm />} />
                     <Route path="/favoritar-produtos/:idLista/edit" element={<FavoritarProdutoForm />} />
+
 
                     {/* Rotas de Carrinho */}
                     <Route path="/carrinhos" element={<CarrinhoPage />} />
@@ -154,11 +172,13 @@ function App() {
                     <Route path="/carrinhos/new" element={<CarrinhoForm />} />
                     <Route path="/carrinhos/:idCarrinho/edit" element={<CarrinhoForm />} />
 
+
                     {/* Rotas de AdicionarProdutoCarrinho */}
                     <Route path="/adicionar-produto-carrinho" element={<AdicionarProdutoCarrinhoPage />} />
                     <Route path="/adicionar-produto-carrinho/list" element={<AdicionarProdutoCarrinhoList />} />
                     <Route path="/adicionar-produto-carrinho/new" element={<AdicionarProdutoCarrinhoForm />} />
                     <Route path="/adicionar-produto-carrinho/:id/edit" element={<AdicionarProdutoCarrinhoForm />} />
+
 
                     {/* Rotas de Venda */}
                     <Route path="/vendas" element={<VendaPage />} />
@@ -166,15 +186,23 @@ function App() {
                     <Route path="/vendas/new" element={<VendaForm />} />
                     <Route path="/vendas/:idVenda/edit" element={<VendaForm />} />
 
+
                     {/* Rotas de Avaliacao */}
                     <Route path="/avaliacoes" element={<AvaliacaoPage />} />
                     <Route path="/avaliacoes/list" element={<AvaliacaoList />} />
                     <Route path="/avaliacoes/new" element={<AvaliacaoForm />} />
                     <Route path="/avaliacoes/:idAvaliacao/edit" element={<AvaliacaoForm />} />
+
+
+                    {/* Rota Para a home page */}
+                    <Route path="/HOME" element={<HomePage />} />
+
+
                 </Routes>
             </div>
         </Router>
     );
 }
+
 
 export default App;

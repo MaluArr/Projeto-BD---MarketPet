@@ -29,12 +29,13 @@ public class Endereco {
 
     // Validações personalizadas
     public boolean isCepValido() {
-        return cep != null && cep.matches("\\d{8}");
+        return this.cep != null && this.cep.matches("\\d{8}"); // Apenas números e exatamente 8 dígitos
     }
 
     public boolean isEstadoValido() {
-        return estado != null && estado.matches("^[A-Z]{2}$");
+        return this.estado != null && this.estado.matches("[A-Z]{2}"); // Ex: SP, RJ
     }
+
 
     // Getters e Setters
     public Integer getIdEndereco() {
@@ -100,6 +101,8 @@ public class Endereco {
     public void setComplemento(String complemento) {
         this.complemento = complemento;
     }
+
+
 
     // Métodos equals e hashCode
     @Override

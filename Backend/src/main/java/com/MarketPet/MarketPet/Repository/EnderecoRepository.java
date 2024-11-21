@@ -63,40 +63,54 @@ public class EnderecoRepository {
     }
 
     public Endereco save(Endereco endereco) {
-        String sql = "INSERT INTO endereco (id_endereco, cep, rua, numero, bairro, cidade, estado, complemento) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
-                "ON DUPLICATE KEY UPDATE cep = ?, rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, complemento = ?";
-        logger.info("Salvando endereço com ID: {}", endereco.getIdEndereco());
+        String insertSql = "INSERT INTO endereco (cep, rua, numero, bairro, cidade, estado, complemento) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String updateSql = "UPDATE endereco SET cep = ?, rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, complemento = ? WHERE id_endereco = ?";
 
-        try (Connection con = JDBC_Connection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = JDBC_Connection.getConnection()) {
+            if (endereco.getIdEndereco() == null) {
+                // Inserir novo endereço
+                try (PreparedStatement ps = con.prepareStatement(insertSql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                    ps.setString(1, endereco.getCep());
+                    ps.setString(2, endereco.getRua());
+                    ps.setString(3, endereco.getNumero());
+                    ps.setString(4, endereco.getBairro());
+                    ps.setString(5, endereco.getCidade());
+                    ps.setString(6, endereco.getEstado());
+                    ps.setString(7, endereco.getComplemento());
 
-            ps.setInt(1, endereco.getIdEndereco());
-            ps.setString(2, endereco.getCep());
-            ps.setString(3, endereco.getRua());
-            ps.setString(4, endereco.getNumero());
-            ps.setString(5, endereco.getBairro());
-            ps.setString(6, endereco.getCidade());
-            ps.setString(7, endereco.getEstado());
-            ps.setString(8, endereco.getComplemento());
+                    ps.executeUpdate();
 
-            ps.setString(9, endereco.getCep());
-            ps.setString(10, endereco.getRua());
-            ps.setString(11, endereco.getNumero());
-            ps.setString(12, endereco.getBairro());
-            ps.setString(13, endereco.getCidade());
-            ps.setString(14, endereco.getEstado());
-            ps.setString(15, endereco.getComplemento());
+                    // Obter ID gerado automaticamente
+                    try (ResultSet rs = ps.getGeneratedKeys()) {
+                        if (rs.next()) {
+                            endereco.setIdEndereco(rs.getInt(1));
+                        }
+                    }
+                }
+            } else {
+                // Atualizar endereço existente
+                try (PreparedStatement ps = con.prepareStatement(updateSql)) {
+                    ps.setString(1, endereco.getCep());
+                    ps.setString(2, endereco.getRua());
+                    ps.setString(3, endereco.getNumero());
+                    ps.setString(4, endereco.getBairro());
+                    ps.setString(5, endereco.getCidade());
+                    ps.setString(6, endereco.getEstado());
+                    ps.setString(7, endereco.getComplemento());
+                    ps.setInt(8, endereco.getIdEndereco());
 
-            ps.executeUpdate();
-            logger.info("Endereço salvo com sucesso: {}", endereco.getIdEndereco());
-
+                    ps.executeUpdate();
+                }
+            }
         } catch (SQLException e) {
-            logger.error("Erro ao salvar endereço com ID: {}", endereco.getIdEndereco(), e);
+            logger.error("Erro ao salvar endereço", e);
+            throw new RuntimeException("Erro ao salvar endereço", e);
         }
 
         return endereco;
     }
+
+
 
     public void delete(Integer idEndereco) {
         String sql = "DELETE FROM endereco WHERE id_endereco = ?";

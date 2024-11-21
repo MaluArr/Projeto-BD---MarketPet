@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import '../styles/Atendente.css';
 import axios from 'axios';
 
@@ -10,13 +9,8 @@ const AtendentePage = () => {
     const fetchAtendentes = () => {
         axios.get('http://localhost:8080/api/atendentes')
             .then(response => {
-                // Ajusta os dados recebidos para o formato esperado
-                const atendentesFormatados = response.data.map(atendente => ({
-                    idAtendente: atendente.idAtendente || atendente.id_atendente,
-                    cpfFuncionario: atendente.cpfFuncionario || atendente.cpf_funcionario,
-                }));
-                setAtendentes(atendentesFormatados);
-                setError(null);
+                setAtendentes(response.data); // Atualiza o estado com os atendentes
+                setError(null); // Limpa qualquer erro anterior
             })
             .catch(err => {
                 setError('Erro ao buscar atendentes');
@@ -29,9 +23,9 @@ const AtendentePage = () => {
             <h1>Gerenciamento de Atendentes</h1>
             <div className="action-buttons">
                 <button onClick={fetchAtendentes}>Listar Atendentes</button>
-                <Link to="/atendentes/new" className="action-button">
-                    Adicionar Novo Atendente
-                </Link>
+                <button onClick={() => window.location.href = '/atendentes/list'} className="action-button">
+                    Gerenciamento Atendente
+                </button>
             </div>
 
             {error && <p className="error-message">{error}</p>}

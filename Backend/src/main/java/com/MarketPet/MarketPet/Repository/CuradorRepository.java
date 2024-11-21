@@ -22,27 +22,24 @@ public class CuradorRepository {
     public List<Curador> findAll() {
         List<Curador> curadores = new ArrayList<>();
         String sql = "SELECT * FROM curador";
-        logger.info("Executando consulta para buscar todos os curadores");
 
+        logger.info("Buscando todos os curadores...");
         try (Connection con = JDBC_Connection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                Curador curador = mapRowToCurador(rs);
-                curadores.add(curador);
+                curadores.add(mapRowToCurador(rs));
             }
-
         } catch (SQLException e) {
             logger.error("Erro ao buscar todos os curadores", e);
         }
-
         return curadores;
     }
 
     public Optional<Curador> findById(Integer idCurador) {
         String sql = "SELECT * FROM curador WHERE id_curador = ?";
-        logger.info("Executando consulta para buscar curador com ID: {}", idCurador);
+        logger.info("Buscando curador pelo ID: {}", idCurador);
 
         try (Connection con = JDBC_Connection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -50,21 +47,18 @@ public class CuradorRepository {
             ps.setInt(1, idCurador);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    Curador curador = mapRowToCurador(rs);
-                    return Optional.of(curador);
+                    return Optional.of(mapRowToCurador(rs));
                 }
             }
-
         } catch (SQLException e) {
-            logger.error("Erro ao buscar curador com ID: {}", idCurador, e);
+            logger.error("Erro ao buscar curador pelo ID: {}", idCurador, e);
         }
-
         return Optional.empty();
     }
 
     public Optional<Curador> findByFuncionario(Long cpfFuncionario) {
         String sql = "SELECT * FROM curador WHERE cpf_funcionario = ?";
-        logger.info("Executando consulta para buscar curador com CPF do funcionário: {}", cpfFuncionario);
+        logger.info("Buscando curador pelo CPF do funcionário: {}", cpfFuncionario);
 
         try (Connection con = JDBC_Connection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -72,54 +66,58 @@ public class CuradorRepository {
             ps.setLong(1, cpfFuncionario);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    Curador curador = mapRowToCurador(rs);
-                    return Optional.of(curador);
+                    return Optional.of(mapRowToCurador(rs));
                 }
             }
-
         } catch (SQLException e) {
-            logger.error("Erro ao buscar curador com CPF do funcionário: {}", cpfFuncionario, e);
+            logger.error("Erro ao buscar curador pelo CPF do funcionário: {}", cpfFuncionario, e);
         }
-
         return Optional.empty();
     }
 
     public Curador save(Curador curador) {
-        String sql = "INSERT INTO curador (id_curador, cpf_funcionario) " +
-                "VALUES (?, ?) " +
-                "ON DUPLICATE KEY UPDATE cpf_funcionario = ?";
-        logger.info("Salvando curador com ID: {}", curador.getIdCurador());
+        String sql = curador.getIdCurador() == null
+                ? "INSERT INTO curador (cpf_funcionario) VALUES (?)"
+                : "UPDATE curador SET cpf_funcionario = ? WHERE id_curador = ?";
+        logger.info("Salvando curador: {}", curador);
 
         try (Connection con = JDBC_Connection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-            ps.setInt(1, curador.getIdCurador());
-            ps.setLong(2, curador.getCpfFuncionario());
-            ps.setLong(3, curador.getCpfFuncionario());
+            ps.setLong(1, curador.getCpfFuncionario());
+            if (curador.getIdCurador() != null) {
+                ps.setInt(2, curador.getIdCurador());
+            }
 
             ps.executeUpdate();
-            logger.info("Curador salvo com sucesso: {}", curador.getIdCurador());
+
+            if (curador.getIdCurador() == null) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        curador.setIdCurador(rs.getInt(1));
+                    }
+                }
+            }
 
         } catch (SQLException e) {
-            logger.error("Erro ao salvar curador com ID: {}", curador.getIdCurador(), e);
+            logger.error("Erro ao salvar curador: {}", curador, e);
+            throw new RuntimeException("Erro ao salvar curador", e);
         }
-
         return curador;
     }
 
     public void delete(Integer idCurador) {
         String sql = "DELETE FROM curador WHERE id_curador = ?";
-        logger.info("Deletando curador com ID: {}", idCurador);
+        logger.info("Deletando curador pelo ID: {}", idCurador);
 
         try (Connection con = JDBC_Connection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, idCurador);
             ps.executeUpdate();
-            logger.info("Curador deletado com sucesso: {}", idCurador);
-
         } catch (SQLException e) {
-            logger.error("Erro ao deletar curador com ID: {}", idCurador, e);
+            logger.error("Erro ao deletar curador pelo ID: {}", idCurador, e);
+            throw new RuntimeException("Erro ao deletar curador", e);
         }
     }
 

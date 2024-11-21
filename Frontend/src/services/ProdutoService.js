@@ -3,7 +3,7 @@ import axios from 'axios';
 const ProdutoService = {
     fetchProdutos: async () => {
         try {
-            const response = await axios.get('/api/produtos');
+            const response = await axios.get('http://localhost:8080/api/produtos');
             return response.data;
         } catch (error) {
             console.error('Erro ao buscar produtos:', error);
@@ -13,7 +13,7 @@ const ProdutoService = {
 
     getProdutoByCodigo: async (codigoProduto) => {
         try {
-            const response = await axios.get(`/api/produtos/${codigoProduto}`);
+            const response = await axios.get(`http://localhost:8080/api/produtos/${codigoProduto}`);
             return response.data;
         } catch (error) {
             console.error('Erro ao buscar produto:', error);
@@ -23,7 +23,7 @@ const ProdutoService = {
 
     createProduto: async (produtoData) => {
         try {
-            const response = await axios.post('/api/produtos', produtoData);
+            const response = await axios.post('http://localhost:8080/api/produtos', produtoData);
             return response.data;
         } catch (error) {
             console.error('Erro ao criar produto:', error);
@@ -33,7 +33,7 @@ const ProdutoService = {
 
     updateProduto: async (codigoProduto, produtoData) => {
         try {
-            const response = await axios.put(`/api/produtos/${codigoProduto}`, produtoData);
+            const response = await axios.put(`http://localhost:8080/api/produtos/${codigoProduto}`, produtoData);
             return response.data;
         } catch (error) {
             console.error('Erro ao atualizar produto:', error);
@@ -43,7 +43,7 @@ const ProdutoService = {
 
     deleteProduto: async (codigoProduto) => {
         try {
-            await axios.delete(`/api/produtos/${codigoProduto}`);
+            await axios.delete(`http://localhost:8080/api/produtos/${codigoProduto}`);
         } catch (error) {
             console.error('Erro ao deletar produto:', error);
             throw new Error('Erro ao deletar produto');

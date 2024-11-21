@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import '../styles/Comprador.css';
 import axios from 'axios';
 
@@ -10,7 +9,6 @@ const CompradorPage = () => {
     const fetchCompradores = () => {
         axios.get('http://localhost:8080/api/compradores')
             .then(response => {
-                // Ajusta os dados recebidos para o formato esperado
                 const compradoresFormatados = response.data.map(comprador => ({
                     CPF: comprador.CPF || comprador.cpf,
                     idEndereco: comprador.idEndereco || comprador.id_endereco,
@@ -30,9 +28,9 @@ const CompradorPage = () => {
             <h1>Gerenciamento de Compradores</h1>
             <div className="action-buttons">
                 <button onClick={fetchCompradores}>Listar Compradores</button>
-                <Link to="/compradores/new" className="action-button">
-                    Adicionar Novo Comprador
-                </Link>
+                <button onClick={() => window.location.href = '/compradores/list'} className="action-button">
+                    Gerenciamento Comprador
+                </button>
             </div>
 
             {error && <p className="error-message">{error}</p>}

@@ -1,0 +1,65 @@
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+    width: 100%;
+}
+
+
+.dashboard-conteudo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); /* Espaçamento para gráficos grandes */
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px; /* Para evitar que os gráficos fiquem muito extensos */
+}
+
+
+.grafico-container {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.grafico-container canvas {
+    width: 100%;
+    max-height: 500px; /* Limita o tamanho do gráfico */
+}
+.grafico-largo {
+    width: 100%; /* Ocupa toda a largura da tela */
+    max-width: none; /* Remove restrições de largura */
+    height: 600px; /* Ajusta a altura do gráfico */
+    margin: 20px 0; /* Adiciona espaço acima e abaixo */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.dashboard-header .home-button {
+    display: inline-block;
+    background-color: #007bff; /* Azul padrão */
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+
+.dashboard-header .home-button:hover {
+    background-color: #0056b3; /* Azul mais escuro */
+}

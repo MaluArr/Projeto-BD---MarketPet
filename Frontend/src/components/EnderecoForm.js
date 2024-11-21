@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import EnderecoService from '../services/EnderecoService';
+import axios from 'axios';
 import '../styles/Endereco.css';
 
 const EnderecoForm = () => {
@@ -13,39 +13,50 @@ const EnderecoForm = () => {
         estado: '',
         complemento: ''
     });
+    const formatData = () => ({
+        cep: formData.cep.replace(/[^0-9]/g, '').slice(0, 8), // Remove caracteres inválidos e limita a 8 dígitos
+        rua: formData.rua.trim(), // Remove espaços em branco extras
+        numero: formData.numero.trim(), // Mantém como string para seguir o padrão do banco
+        bairro: formData.bairro.trim(),
+        cidade: formData.cidade.trim(),
+        estado: formData.estado.toUpperCase().trim().slice(0, 2), // Garante letras maiúsculas e limita a 2 caracteres
+        complemento: formData.complemento.trim() || null // Envia `null` se estiver vazio
+    });
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const { idEndereco } = useParams();
+    const { idEndereco } = useParams(); // Pega o ID do endereço via URL
 
     useEffect(() => {
         if (idEndereco) {
-            fetchEndereco(idEndereco);
+            fetchEndereco(idEndereco); // Carrega os dados para edição
         }
     }, [idEndereco]);
 
     const fetchEndereco = async (id) => {
         try {
-            const response = await EnderecoService.getEnderecoById(id);
-            setFormData(response.data);
+            const response = await axios.get(`http://localhost:8080/api/enderecos/${id}`);
+            setFormData(response.data); // Preenche os dados no formulário
         } catch (error) {
             setError('Falha ao carregar dados do endereço');
         }
     };
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const formData= formatData();
         setError('');
         try {
             if (idEndereco) {
-                await EnderecoService.updateEndereco(idEndereco, formData);
+                await axios.put(`http://localhost:8080/api/enderecos/${idEndereco}`, formData);
             } else {
-                await EnderecoService.createEndereco(formData);
+                await axios.post('http://localhost:8080/api/enderecos', formData);
             }
-            navigate('/enderecos');
+            navigate('/enderecos'); // Redireciona após salvar
         } catch (error) {
             setError('Falha ao salvar endereço');
         }

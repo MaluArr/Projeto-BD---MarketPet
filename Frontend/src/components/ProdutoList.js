@@ -41,7 +41,6 @@ const ProdutoList = () => {
                     <th>Descrição</th>
                     <th>Categoria</th>
                     <th>Preço</th>
-                    <th>Nota</th>
                     <th>Ações</th>
                 </tr>
                 </thead>
@@ -52,7 +51,6 @@ const ProdutoList = () => {
                         <td>{produto.descricao}</td>
                         <td>{produto.categoria}</td>
                         <td>{produto.preco}</td>
-                        <td>{produto.nota}</td>
                         <td>
                             <Link to={`/produtos/${produto.codigoProduto}/edit`} className="edit-button">Editar</Link>
                             <button onClick={() => handleDelete(produto.codigoProduto)} className="delete-button">Excluir</button>

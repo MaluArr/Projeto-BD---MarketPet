@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import '../styles/Curadoria.css';
 import axios from 'axios';
 
@@ -10,16 +9,8 @@ const CuradoriaPage = () => {
     const fetchCuradorias = () => {
         axios.get('http://localhost:8080/api/curadorias')
             .then(response => {
-                // Ajusta os dados recebidos para o formato esperado
-                const curadoriasFormatadas = response.data.map(curadoria => ({
-                    codigoCuradoria: curadoria.codigoCuradoria || curadoria.codigo_curadoria,
-                    descricao: curadoria.descricao,
-                    resultadoCuradoria: curadoria.resultadoCuradoria || curadoria.resultado_curadoria,
-                    idCurador: curadoria.idCurador || curadoria.id_curador,
-                    codigoProduto: curadoria.codigoProduto || curadoria.codigo_produto,
-                }));
-                setCuradorias(curadoriasFormatadas);
-                setError(null);
+                setCuradorias(response.data); // Atualiza o estado com as curadorias
+                setError(null); // Limpa qualquer erro anterior
             })
             .catch(err => {
                 setError('Erro ao buscar curadorias');
@@ -32,9 +23,9 @@ const CuradoriaPage = () => {
             <h1>Gerenciamento de Curadorias</h1>
             <div className="action-buttons">
                 <button onClick={fetchCuradorias}>Listar Curadorias</button>
-                <Link to="/curadorias/new" className="action-button">
-                    Adicionar Nova Curadoria
-                </Link>
+                <button onClick={() => window.location.href = '/curadorias/list'} className="action-button">
+                    Gerenciamento Curadoria
+                </button>
             </div>
 
             {error && <p className="error-message">{error}</p>}
@@ -70,4 +61,3 @@ const CuradoriaPage = () => {
 };
 
 export default CuradoriaPage;
-
